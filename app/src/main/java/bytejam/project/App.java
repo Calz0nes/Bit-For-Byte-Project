@@ -3,6 +3,8 @@
  */
 package bytejam.project;
 
+import java.awt.Window;
+
 public class App {
     public String getGreeting() {
         return "Hello World!";
@@ -12,6 +14,9 @@ public class App {
         System.out.println(new App().getGreeting());
         System.out.println("your moms gay");
         System.out.println("this is a test");
+
+        Window window = Window.get();
+        window.run();
 
     }
 }
