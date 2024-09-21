@@ -3,7 +3,7 @@
  */
 package bytejam.project;
 
-import java.awt.Window;
+import bytejam.project.turbo.Window;
 
 public class App {
     public String getGreeting() {
