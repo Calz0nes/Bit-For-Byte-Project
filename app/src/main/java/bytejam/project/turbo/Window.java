@@ -62,9 +62,11 @@ public class Window {
         switch (newScene) {
             case 0:
                 currentScene = new TitleScene();
+                currentScene.init();
                 break;
             case 1:
                 currentScene = new PresentScene();
+                currentScene.init();
                 break;
             default:
                 assert false : "Unknown scene '" + newScene + "'";
@@ -134,7 +136,8 @@ public class Window {
 	// bindings available for use.
     public void loop() {
         float beginTime = Time.getTime(); //Time when frame started.
-        float endTime = Time.getTime(); //Time when frame ended.
+        float endTime; //Time when frame ended.
+        float dt = -1.0f;
 
         while ( !glfwWindowShouldClose(glfwWindow) ) {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
@@ -144,14 +147,20 @@ public class Window {
             glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
+
+            if (dt >= 0) {
+                currentScene.update(dt);
+            }
+
+            
             if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
-                System.out.println("Space key is pressed");
+                changeScene(0);
             }
             
             glfwSwapBuffers(glfwWindow);
 
             endTime = Time.getTime();
-            float dt = endTime - beginTime; //Delta time = seconds per frame.
+            dt = endTime - beginTime; //Delta time = seconds per frame.
             beginTime = endTime;
 		}
     }
