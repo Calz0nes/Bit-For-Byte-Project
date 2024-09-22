@@ -12,7 +12,6 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
-        System.out.println("your moms gay");
         System.out.println("this is a test");
 
         Window window = Window.get();
