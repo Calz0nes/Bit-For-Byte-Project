@@ -32,14 +32,16 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import bytejam.project.turbo.util.Time;
+
 public class Window {
 
     private int width, height;
     private String title;
+    private long glfwWindow;
 
     private static Window window = null;
-
-    private long glfwWindow;
+    private static Scene currentScene = null;
 
     private Window() {
         this.width = 1920;
@@ -54,6 +56,20 @@ public class Window {
         }
         
         return Window.window;
+    }
+
+    public static void changeScene(int newScene) {
+        switch (newScene) {
+            case 0:
+                currentScene = new TitleScene();
+                break;
+            case 1:
+                currentScene = new PresentScene();
+                break;
+            default:
+                assert false : "Unknown scene '" + newScene + "'";
+                break;      
+        }
     }
     
     public void run() {
@@ -117,6 +133,9 @@ public class Window {
 	// creates the GLCapabilities instance and makes the OpenGL
 	// bindings available for use.
     public void loop() {
+        float beginTime = Time.getTime(); //Time when frame started.
+        float endTime = Time.getTime(); //Time when frame ended.
+
         while ( !glfwWindowShouldClose(glfwWindow) ) {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 			// Poll for window events. 
@@ -131,6 +150,9 @@ public class Window {
             
             glfwSwapBuffers(glfwWindow);
 
+            endTime = Time.getTime();
+            float dt = endTime - beginTime; //Delta time = seconds per frame.
+            beginTime = endTime;
 		}
     }
 
