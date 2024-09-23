@@ -4,7 +4,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
-import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
@@ -15,53 +14,15 @@ import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
-import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
-import static org.lwjgl.opengl.GL20.GL_INFO_LOG_LENGTH;
-import static org.lwjgl.opengl.GL20.GL_LINK_STATUS;
-import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
-import static org.lwjgl.opengl.GL20.glAttachShader;
-import static org.lwjgl.opengl.GL20.glCompileShader;
-import static org.lwjgl.opengl.GL20.glCreateProgram;
-import static org.lwjgl.opengl.GL20.glCreateShader;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glGetProgrami;
-import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
-import static org.lwjgl.opengl.GL20.glGetShaderi;
-import static org.lwjgl.opengl.GL20.glLinkProgram;
-import static org.lwjgl.opengl.GL20.glShaderSource;
-import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
-public class TitleScene extends Scene{
+import bytejam.project.renderer.Shader;
 
-    private String vertexShaderSrc = "#version 330 core\n" + //
-                "layout (location=0) in vec3 aPos;\n" + //
-                "layout (location=1) in vec4 aColor;\n" + //
-                "\n" + //
-                "out vec4 fColor;\n" + //
-                "\n" + //
-                "void main()\n" + //
-                "{\n" + //
-                "   fColor = aColor;\n" + //
-                "   gl_Position = vec4(aPos, 1.0);\n" + //
-                "}";
-    
-    private String fragmentShaderSrc = "#version 330 core\n" + //
-                "\n" + //
-                "in vec4 fColor;\n" + //
-                "\n" + //
-                "out vec4 color;\n" + //
-                "\n" + //
-                "void main() \n" + //
-                "{\n" + //
-                "   color = fColor;\n" + //
-                "}";
-    
-    private int vertexID, fragmentID, shaderProgram;
+public class TitleScene extends Scene{
 
     private float[] vertexArray = {
         // positon               // color
@@ -80,60 +41,16 @@ public class TitleScene extends Scene{
 
     private int vaoID, vboID, eboID;
 
+    private Shader defaultshader;
+
     public TitleScene() {
 
     }
 
     @Override
     public void init() {
-        //======================================================
-        // Compile and link shaders.
-        //======================================================
-
-        // First load and compile the vertex shader.
-        vertexID = glCreateShader(GL_VERTEX_SHADER);
-        // Pass the shader source to the GPU.
-        glShaderSource(vertexID, vertexShaderSrc);
-        glCompileShader(vertexID);
-
-        // Check for errors in compilation.
-        int success_Vertex = glGetShaderi(vertexID, GL_COMPILE_STATUS);
-        if (success_Vertex == GL_FALSE) {
-            int lenVert = glGetShaderi(vertexID, GL_INFO_LOG_LENGTH);
-            System.out.println("Error: 'defaultShader.glsl'\n\tVertex shader compilation failed.");
-            System.out.println(glGetShaderInfoLog(vertexID, lenVert));
-            assert false : "";
-        }
-
-        // Now load and compile the fragment shader.
-        fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
-        // Pass the shader source to the GPU.
-        glShaderSource(fragmentID, fragmentShaderSrc);
-        glCompileShader(fragmentID);
-
-        // Check for errors in compilation.
-        int success_Fragment = glGetShaderi(fragmentID, GL_COMPILE_STATUS);
-        if (success_Fragment == GL_FALSE) {
-            int lenFrag = glGetShaderi(fragmentID, GL_INFO_LOG_LENGTH);
-            System.out.println("Error: 'defaultShader.glsl'\n\tFragment shader comilation failed.");
-            System.out.println(glGetShaderInfoLog(fragmentID, lenFrag));
-            assert false : "";
-
-        }
-
-        // Link shader and check for errors.
-        shaderProgram = glCreateProgram();
-        glAttachShader(shaderProgram, vertexID);
-        glAttachShader(shaderProgram, fragmentID);
-        glLinkProgram(shaderProgram);
-
-        // Check for linking errors.
-        int success_Program = glGetProgrami(shaderProgram, GL_LINK_STATUS);
-        if (success_Program == GL_FALSE) {
-            int lenPrgm = glGetProgrami(shaderProgram, GL_INFO_LOG_LENGTH);
-            System.out.println("ERROR: 'defaultShader.glsl'\n\tLinking of shaders failed.");
-            System.out.println(glGetShaderInfoLog(shaderProgram, lenPrgm));
-        }
+        defaultshader = new Shader();
+        defaultshader.compile();
 
         // ===========================================================
         // Generate VAQ, VBO, and EBO buffer objects and send to GPU
@@ -176,7 +93,7 @@ public class TitleScene extends Scene{
     public void update(float dt) {
 
         // Bind shader program.
-        glUseProgram(shaderProgram);
+        defaultshader.use();
         // Bind the VAO that we're using.
         glBindVertexArray(vaoID);
 
@@ -192,7 +109,7 @@ public class TitleScene extends Scene{
 
         glBindVertexArray(0);
 
-        glUseProgram(0);
+        defaultshader.detach();
 
     }
 
