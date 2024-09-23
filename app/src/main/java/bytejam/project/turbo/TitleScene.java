@@ -38,27 +38,28 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class TitleScene extends Scene{
 
-    private String vertexShaderSrc = "#version 330 core\r\n" + //
-                "    layout (location = 0) in vec3 aPos;\r\n" + //
-                "    layout (location = 1) in vec4 aColor;\r\n" + //
-                "\r\n" + //
-                "    out vec4 fColor;\r\n" + //
-                "\r\n" + //
-                "    void main() \r\n" + //
-                "    {\r\n" + //
-                "        fcolor = acolor;\r\n" + //
-                "        gl_Position = vec4(aPos);\r\n" + //
-                "    }";
+    private String vertexShaderSrc = "#version 330 core\n" + //
+                "layout (location=0) in vec3 aPos;\n" + //
+                "layout (location=1) in vec4 aColor;\n" + //
+                "\n" + //
+                "out vec4 fColor;\n" + //
+                "\n" + //
+                "void main()\n" + //
+                "{\n" + //
+                "   fColor = aColor;\n" + //
+                "   gl_Position = vec4(aPos, 1.0);\n" + //
+                "}";
     
-    private String fragmentShaderSrc = "#version 330 core\r\n" + //
-                "\r\n" + //
-                "    in vec4 fColor;\r\n" + //
-                "\r\n" + //
-                "    out vec4 color;\r\n" + //
-                "\r\n" + //
-                "    void main() {\r\n" + //
-                "        color = fColor;\r\n" + //
-                "    }";
+    private String fragmentShaderSrc = "#version 330 core\n" + //
+                "\n" + //
+                "in vec4 fColor;\n" + //
+                "\n" + //
+                "out vec4 color;\n" + //
+                "\n" + //
+                "void main() \n" + //
+                "{\n" + //
+                "   color = fColor;\n" + //
+                "}";
     
     private int vertexID, fragmentID, shaderProgram;
 
@@ -89,7 +90,7 @@ public class TitleScene extends Scene{
         // Compile and link shaders.
         //======================================================
 
-        // First load and complile the vertex shader.
+        // First load and compile the vertex shader.
         vertexID = glCreateShader(GL_VERTEX_SHADER);
         // Pass the shader source to the GPU.
         glShaderSource(vertexID, vertexShaderSrc);
@@ -99,14 +100,14 @@ public class TitleScene extends Scene{
         int success_Vertex = glGetShaderi(vertexID, GL_COMPILE_STATUS);
         if (success_Vertex == GL_FALSE) {
             int lenVert = glGetShaderi(vertexID, GL_INFO_LOG_LENGTH);
-            System.out.println("Error: 'defaultShader.glsl'\n\tVertex shader comilation failed.");
+            System.out.println("Error: 'defaultShader.glsl'\n\tVertex shader compilation failed.");
             System.out.println(glGetShaderInfoLog(vertexID, lenVert));
             assert false : "";
         }
 
-        // Now load and complile the vertex shader.
+        // Now load and compile the fragment shader.
         fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
-        // Prass the shader source to the GPU.
+        // Pass the shader source to the GPU.
         glShaderSource(fragmentID, fragmentShaderSrc);
         glCompileShader(fragmentID);
 
@@ -115,7 +116,7 @@ public class TitleScene extends Scene{
         if (success_Fragment == GL_FALSE) {
             int lenFrag = glGetShaderi(fragmentID, GL_INFO_LOG_LENGTH);
             System.out.println("Error: 'defaultShader.glsl'\n\tFragment shader comilation failed.");
-            System.out.println(glGetShaderInfoLog(vertexID, lenFrag));
+            System.out.println(glGetShaderInfoLog(fragmentID, lenFrag));
             assert false : "";
 
         }
@@ -173,6 +174,7 @@ public class TitleScene extends Scene{
 
     @Override
     public void update(float dt) {
+
         // Bind shader program.
         glUseProgram(shaderProgram);
         // Bind the VAO that we're using.

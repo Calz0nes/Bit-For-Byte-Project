@@ -3,7 +3,6 @@ package bytejam.project.turbo;
 import org.lwjgl.Version;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_MAXIMIZED;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
@@ -29,7 +28,6 @@ import org.lwjgl.opengl.GL;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import bytejam.project.turbo.util.Time;
@@ -126,6 +124,8 @@ public class Window {
 
 
         GL.createCapabilities();
+
+        changeScene(0);
         
     }
 
@@ -144,17 +144,11 @@ public class Window {
 			// Poll for window events. 
 			glfwPollEvents();
 
-            glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+            //glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
-
 
             if (dt >= 0) {
                 currentScene.update(dt);
-            }
-
-            
-            if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
-                changeScene(0);
             }
             
             glfwSwapBuffers(glfwWindow);
