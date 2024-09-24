@@ -49,7 +49,7 @@ public class TitleScene extends Scene{
 
     @Override
     public void init() {
-        defaultshader = new Shader();
+        defaultshader = new Shader("assets/shader/default.glsl");
         defaultshader.compile();
 
         // ===========================================================
