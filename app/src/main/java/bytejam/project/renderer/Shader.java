@@ -37,7 +37,8 @@ public class Shader {
         this.filepath = filepath;
         try {
             String source = new String(Files.readAllBytes(Paths.get(filepath)));
-            String[] splitString = source.split("(#type)()+([a-zA-Z]+)");
+            String[] splitString = source.split("(#type)( )+([a-zA-Z]+)");
+            System.out.println(splitString.length);
 
             // Find the first pattern after #type 'pattern'.
             int index = source.indexOf("#type") + 6;
@@ -60,9 +61,9 @@ public class Shader {
 
             // Sort second pattern.
             if (secondPattern.equals("vertex")) {
-                vertexSource = splitString[1];
+                vertexSource = splitString[2];
             } else if (secondPattern.equals("fragment")) {
-                fragmentSource = splitString[1];
+                fragmentSource = splitString[2];
             } else {
                 throw new IOException("Unexpected token '" + secondPattern + "'in'" + filepath + "'");
             }

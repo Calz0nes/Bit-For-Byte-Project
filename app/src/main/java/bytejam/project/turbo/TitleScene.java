@@ -50,7 +50,7 @@ public class TitleScene extends Scene{
 
     @Override
     public void init() {
-        defaultshader = new Shader("assets/shader/default.glsl");
+        defaultshader = new Shader("assets/shaders/default.glsl");
 
         this.camera = new Camera(new Vector2f());
        
