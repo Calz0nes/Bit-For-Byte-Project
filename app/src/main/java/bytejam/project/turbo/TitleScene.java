@@ -27,10 +27,10 @@ public class TitleScene extends Scene{
 
     private float[] vertexArray = {
         // positon               // color
-         0.5f, -0.5f, 0.0f,      1.0f, 0.0f, 0.0f, 1.0f, // Bottom right
-        -0.5f,  0.5f, 0.0f,      0.0f, 1.0f, 0.0f, 1.0f, // Top left
-         0.5f,  0.5f, 0.0f,      0.0f, 0.0f, 1.0f, 1.0f, // Top right
-        -0.5f, -0.5f, 0.0f,      1.0f, 1.0f, 0.0f, 1.0f  // Bottom left
+         50.0f, -50.0f, 0.0f,      1.0f, 0.0f, 0.0f, 1.0f, // Bottom right
+        -50.0f,  50.0f, 0.0f,      0.0f, 1.0f, 0.0f, 1.0f, // Top left
+         50.0f,  50.0f, 0.0f,      0.0f, 0.0f, 1.0f, 1.0f, // Top right
+        -50.0f, -50.0f, 0.0f,      1.0f, 1.0f, 0.0f, 1.0f  // Bottom left
 
     };
 
@@ -95,6 +95,8 @@ public class TitleScene extends Scene{
 
     @Override
     public void update(float dt) {
+        camera.position.x -= dt * 50.0f;
+        camera.position.y -= dt * 50.0f;
 
         // Bind shader program.
         defaultshader.use();
