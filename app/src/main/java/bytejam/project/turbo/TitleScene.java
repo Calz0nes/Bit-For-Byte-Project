@@ -3,6 +3,7 @@ package bytejam.project.turbo;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
@@ -50,6 +51,9 @@ public class TitleScene extends Scene{
     @Override
     public void init() {
         defaultshader = new Shader("assets/shader/default.glsl");
+
+        this.camera = new Camera(new Vector2f());
+       
         defaultshader.compile();
 
         // ===========================================================
@@ -94,6 +98,8 @@ public class TitleScene extends Scene{
 
         // Bind shader program.
         defaultshader.use();
+        defaultshader.uploadMat4f("uProjection", camera.getProjectionMatrix());
+        defaultshader.uploadMat4f("uView", camera.getViewMatrix());
         // Bind the VAO that we're using.
         glBindVertexArray(vaoID);
 
