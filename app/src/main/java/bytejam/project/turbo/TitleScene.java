@@ -95,13 +95,15 @@ public class TitleScene extends Scene{
 
     @Override
     public void update(float dt) {
-        camera.position.x -= dt * 50.0f;
-        camera.position.y -= dt * 50.0f;
+        camera.setCamPosition(new Vector2f(dt -= 50.0f, dt -= 50.0f));
 
         // Bind shader program.
         defaultshader.use();
+
+        // Upload the matrixes used for finding the view port.
         defaultshader.uploadMat4f("uProjection", camera.getProjectionMatrix());
         defaultshader.uploadMat4f("uView", camera.getViewMatrix());
+        
         // Bind the VAO that we're using.
         glBindVertexArray(vaoID);
 
