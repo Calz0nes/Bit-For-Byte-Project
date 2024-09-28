@@ -9,6 +9,8 @@ import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11.glDrawElements;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
@@ -22,15 +24,16 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import bytejam.project.renderer.Shader;
+import bytejam.project.renderer.Texture;
 
 public class TitleScene extends Scene{
 
     private float[] vertexArray = {
-        // positon               // color
-         50.0f, -50.0f, 0.0f,      1.0f, 0.0f, 0.0f, 1.0f, // Bottom right
-        -50.0f,  50.0f, 0.0f,      0.0f, 1.0f, 0.0f, 1.0f, // Top left
-         50.0f,  50.0f, 0.0f,      0.0f, 0.0f, 1.0f, 1.0f, // Top right
-        -50.0f, -50.0f, 0.0f,      1.0f, 1.0f, 0.0f, 1.0f  // Bottom left
+        // positon               // color                       // UV Coordinates 
+         50.0f, -50.0f, 0.0f,      1.0f, 0.0f, 0.0f, 1.0f,      1, 1,// Bottom right
+        -50.0f,  50.0f, 0.0f,      0.0f, 1.0f, 0.0f, 1.0f,      0, 0,// Top left
+         50.0f,  50.0f, 0.0f,      0.0f, 0.0f, 1.0f, 1.0f,      1, 0,// Top right
+        -50.0f, -50.0f, 0.0f,      1.0f, 1.0f, 0.0f, 1.0f,      0, 1 // Bottom left
 
     };
 
@@ -43,6 +46,7 @@ public class TitleScene extends Scene{
     private int vaoID, vboID, eboID;
 
     private Shader defaultshader;
+    private Texture testTexture;
 
     public TitleScene() {
 
@@ -51,10 +55,11 @@ public class TitleScene extends Scene{
     @Override
     public void init() {
         defaultshader = new Shader("assets/shaders/default.glsl");
+        defaultshader.compile();
 
         this.camera = new Camera(new Vector2f());
-       
-        defaultshader.compile();
+        this.testTexture = new Texture("assets/images/snail_07.png");
+
 
         // ===========================================================
         // Generate VAQ, VBO, and EBO buffer objects and send to GPU
@@ -84,19 +89,27 @@ public class TitleScene extends Scene{
         // Add the vertex attribute pointers.
         int positionSize = 3;
         int colorSize = 4;
-        int floatSizeBytes = 4;
-        int vertexSizeBytes = (positionSize + colorSize) * floatSizeBytes;
+        int uvSize = 2;
+        int vertexSizeBytes = (positionSize + colorSize + uvSize) * Float.BYTES;
         glVertexAttribPointer(0, positionSize, GL_FLOAT, false, vertexSizeBytes, 0);
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, positionSize * floatSizeBytes);
+        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, positionSize * Float.BYTES);
         glEnableVertexAttribArray(1);
+
+        glVertexAttribPointer(2, uvSize, GL_FLOAT, false, vertexSizeBytes, (positionSize + colorSize) * Float.BYTES);
+        glEnableVertexAttribArray(2);
     }
 
     @Override
     public void update(float dt) {
         camera.position.x -= dt * 50.0f;
         camera.position.y -= dt * 50.0f;
+
+        // Upload texture to shader.
+        defaultshader.uploadTexture("TEX_SAMPLER", 0);
+        glActiveTexture(GL_TEXTURE0);
+        testTexture.bind();
 
         // Bind shader program.
         defaultshader.use();

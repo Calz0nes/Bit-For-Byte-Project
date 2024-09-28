@@ -23,6 +23,7 @@ import static org.lwjgl.opengl.GL20.glGetShaderi;
 import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 import static org.lwjgl.opengl.GL20.glLinkProgram;
 import static org.lwjgl.opengl.GL20.glShaderSource;
+import static org.lwjgl.opengl.GL20.glUniform1i;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 
@@ -38,7 +39,6 @@ public class Shader {
         try {
             String source = new String(Files.readAllBytes(Paths.get(filepath)));
             String[] splitString = source.split("(#type)( )+([a-zA-Z]+)");
-            System.out.println(splitString.length);
 
             // Find the first pattern after #type 'pattern'.
             int index = source.indexOf("#type") + 6;
@@ -72,9 +72,6 @@ public class Shader {
             e.printStackTrace();
             assert false : "Error: Could not open file for shader: '" + filepath + "'";
         }
-
-        System.out.println(vertexSource);
-        System.out.println(fragmentSource);
     }
 
 
@@ -146,5 +143,10 @@ public class Shader {
         mat4.get(matBuffer);
         glUniformMatrix4fv(varLocation, false, matBuffer);
     }
-}
 
+    public void uploadTexture(String varName, int slot) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+        use();
+        glUniform1i(varLocation, slot);
+    }
+}
