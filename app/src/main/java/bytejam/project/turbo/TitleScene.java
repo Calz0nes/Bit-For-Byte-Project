@@ -111,7 +111,7 @@ public class TitleScene extends Scene{
         testTexture.bind();
 
         // Bind shader program.
-        defaultshader.use();
+        defaultshader.bind();
 
         // Upload the matrixes used for finding the view port.
         defaultshader.uploadMat4f("uProjection", camera.getProjectionMatrix());
@@ -132,7 +132,7 @@ public class TitleScene extends Scene{
 
         glBindVertexArray(0);
 
-        defaultshader.detach();
+        defaultshader.unbind();
 
     }
 

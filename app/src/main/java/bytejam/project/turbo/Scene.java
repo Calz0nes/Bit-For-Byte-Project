@@ -1,9 +1,10 @@
 package bytejam.project.turbo;
 
+import bytejam.project.turbo.goc.Collision;
+
 public abstract class Scene {
 
     protected Camera camera;
-
 
     //Scenes contain our objects, renderer, physics.
     //This class is kind of like a blue print of all of the Scenes we will have.

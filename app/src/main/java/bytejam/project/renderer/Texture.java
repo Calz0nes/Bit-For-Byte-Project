@@ -1,5 +1,7 @@
 package bytejam.project.renderer;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -71,4 +73,12 @@ public class Texture {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
+    public void setPos(Point nextPos) {
+
+    }
+
+    public void setSize(Rectangle size) {
+        
+    }
+ 
 }

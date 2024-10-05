@@ -128,12 +128,12 @@ public class Shader {
     }
 
     // Bind program.
-    public void use() {
+    public void bind() {
         glUseProgram(shaderProgramID);
     }
 
     // Unbind program.
-    public void detach() {
+    public void unbind() {
         glUseProgram(0);
     }
 
@@ -146,7 +146,7 @@ public class Shader {
 
     public void uploadTexture(String varName, int slot) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
-        use();
+        bind();
         glUniform1i(varLocation, slot);
     }
 }
