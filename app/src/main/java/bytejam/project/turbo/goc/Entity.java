@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import bytejam.project.renderer.Texture;
+import bytejam.project.turbo.Sound;
 
 public class Entity {
 
@@ -11,6 +12,7 @@ public class Entity {
     private String texturePath;
     private Texture texture;
     private Animation[] animations;
+    private Sound[] sounds;
     private float playerSpeed, jumpSpeed;
     private Rectangle hitBox, size;
     private int animationSlot;
@@ -27,6 +29,14 @@ public class Entity {
         this.isDone = true;
 
     }
+
+    public void addSound(Sound sound, int slot) {
+        this.sounds[slot] = sound;
+    }
+
+    public void playSound(int slot) {
+        this.sounds[slot].play();
+    } 
 
     public void addAnimation(Animation animation, int slot) {
         this.animations[slot] = animation;
@@ -47,7 +57,7 @@ public class Entity {
     }
 
     public void setPos(Point nextPos) {
-        if (new Collision().isPlayer(nextPos)) {
+        if (new Collision().isEntity(nextPos)) {
             this.texture.setPos(nextPos);
             prevPos = nextPos;
         } else {
