@@ -56,6 +56,10 @@ public class Window {
         return Window.window;
     }
 
+    public static Scene getScene() {
+        return get().currentScene;
+    }
+
     public static void changeScene(int newScene) {
         switch (newScene) {
             case 0:
