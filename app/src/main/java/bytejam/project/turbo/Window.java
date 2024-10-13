@@ -10,6 +10,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
 import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
@@ -29,8 +30,6 @@ import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.system.MemoryUtil.NULL;
-
-import bytejam.project.turbo.util.Time;
 
 public class Window {
 
@@ -139,7 +138,7 @@ public class Window {
 	// creates the GLCapabilities instance and makes the OpenGL
 	// bindings available for use.
     public void loop() {
-        float beginTime = Time.getTime(); //Time when frame started.
+        float beginTime = (float)glfwGetTime(); //Time when frame started.
         float endTime; //Time when frame ended.
         float dt = -1.0f;
 
@@ -157,7 +156,7 @@ public class Window {
             
             glfwSwapBuffers(glfwWindow);
 
-            endTime = Time.getTime();
+            endTime = (float)glfwGetTime();
             dt = endTime - beginTime; //Delta time = seconds per frame.
             beginTime = endTime;
 		}

@@ -1,11 +1,11 @@
 package bytejam.project.turbo.goc;
 
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
+
 import bytejam.project.renderer.Texture;
-import bytejam.project.turbo.util.Time;
 
 public class Animation {
 
-    private Time time;
     private float prevTime, delta;
     private int prevFrame;
     private Texture[] frames;
@@ -13,8 +13,7 @@ public class Animation {
 
     public Animation(Entity entity) {
         frames = new Texture[10];
-        time = new Time();
-        prevTime = time.getTime();
+        prevTime = (float)glfwGetTime();
         prevFrame = 0;
         this.entity = entity;
     }
@@ -34,10 +33,10 @@ public class Animation {
         frames[prevFrame].setPos(entity.getPos());
         
 
-        if (time.getTime() - prevTime > delta) {
+        if ((float)glfwGetTime() - prevTime > delta) {
             frames[prevFrame].bind();
 
-            prevTime = time.getTime();
+            prevTime = (float)glfwGetTime();
             prevFrame += 1;
             if (prevFrame == frames.length) {
                 prevFrame = 0;

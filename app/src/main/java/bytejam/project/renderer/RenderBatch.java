@@ -1,11 +1,16 @@
 package bytejam.project.renderer;
 
-import org.joml.Vector4f;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.joml.Vector2f;
+import org.joml.Vector4f;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11.glDrawElements;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
@@ -23,46 +28,52 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import bytejam.project.turbo.Window;
 import bytejam.project.turbo.goc.Background;
 import bytejam.project.turbo.goc.Entity;
+import bytejam.project.turbo.util.AssetPool;
 
 public class RenderBatch {
-    // Vertex
-    // ======
-    // Pos               Clor
-    // float, float,     float, float, float, float
+    //                               Attribute Map
+    // ==========================================================================
+    // Pos               Color                          tex coords        tex id
+    // float, float,     float, float, float, float     float, float,     float
+    // ==========================================================================
     
     private final int POS_SIZE = 2;
     private final int COLOR_SIZE = 4;
+    private final int TEX_COORDS_SIZE = 2;
+    private final int TEX_ID_SiZE = 1;
 
     private final int POS_OFFSET = 0;
-    private final int COLOR_OFFSET = (POS_OFFSET + POS_SIZE) * Float.BYTES;
-    private final int VERTEX_SIZE = 6;
+    private final int COLOR_OFFSET = POS_OFFSET + POS_SIZE * Float.BYTES;
+    private final int TEX_COORDS_OFFSET = COLOR_OFFSET + COLOR_SIZE * Float.BYTES;
+    private final int TEX_ID_OFFSET = TEX_COORDS_OFFSET + TEX_COORDS_SIZE * Float.BYTES;
+    private final int VERTEX_SIZE = 9;
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
     private Entity[] entities;
     private Background background;
-    private int numEntities;
-    private int numBackground;
+    private List<Texture> textures;
     private boolean hasRoom;
     private float[] vertices;
+    private int[] texSlots = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
     private int vaoID, vboID;
     private int maxBatchSize;
     private Shader shader;
 
     public RenderBatch(int maxBatchSize) {
-        this.shader = new Shader("assets/shader/default.glsl");
-        shader.compile();
+        // Always pull shader object from assetpool to reduce lag.
+        this.shader = AssetPool.getShader("assets/shaders/default.glsl");
 
         // Max amount of entities minus one for the background.
-        this.entities = new Entity[maxBatchSize - numBackground];
+        this.entities = new Entity[maxBatchSize - 1];
+        this.textures = new ArrayList<>();
+
         this.maxBatchSize = maxBatchSize;
 
-        // 4 vertices quads.
+        // Total amount of memeory needed for batch size.
         this.vertices = new float[maxBatchSize * 4 * VERTEX_SIZE];
-        this.numEntities = 0;
-        this.numBackground = 0;
+
         this.hasRoom = true;
-        
     }
 
     public void start() {
@@ -85,30 +96,50 @@ public class RenderBatch {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 
-        // Enable the buffer attribute pointers.
+        /* Here we give openGL our attribute map. */
+
+        // Assign vertex pos.
         glVertexAttribPointer(0, POS_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, POS_OFFSET);
         glEnableVertexAttribArray(0);
 
+        // Assign vertex color.
         glVertexAttribPointer(1, COLOR_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, COLOR_OFFSET);
         glEnableVertexAttribArray(1);
+
+        // Assign texture uv coords.
+        glVertexAttribPointer(2, TEX_COORDS_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEX_COORDS_OFFSET);
+        glEnableVertexAttribArray(2);
+
+        // Assign texture id.
+        glVertexAttribPointer(3, TEX_ID_SiZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEX_ID_OFFSET);
+        glEnableVertexAttribArray(3);
     }
 
     public void addEntity(Entity entity) {
         // Get index and add renderObject.
-        int index = this.numEntities;
+        int index = this.entities.length -1;
         this.entities[index] = entity;
-        this.numEntities++;
+
+        if(entity.getTexture() != null) {
+            if (!textures.contains(entity.getTexture())) {
+                textures.add(entity.getTexture());
+            }
+        }
 
         // Add properties to local vertices array.
         loadVertexProperties(index);
 
-        if (numEntities >= this.maxBatchSize) {
+        if (entities.length >= this.maxBatchSize) {
             this.hasRoom = false;
         }
     }
 
     public void addBackground(Background background) {
         // Get index and add renderObject.
+        this.background = background;
+
+        // Add properties to local vertices array.
+        loadVertexProperties(background);
     }
 
     public void render() {
@@ -121,17 +152,27 @@ public class RenderBatch {
         shader.uploadMat4f("uProjection", Window.getScene().camera().getProjectionMatrix());
         shader.uploadMat4f("uView", Window.getScene().camera().getViewMatrix());
 
+        for (int i=0; i < textures.size(); i++) {
+            glActiveTexture(GL_TEXTURE0 + i + 1);
+            textures.get(i).bind();
+        }
+        shader.uploadIntArray("uTextures", texSlots);
+
         glBindVertexArray(vaoID);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
 
         // Render.
-        glDrawElements(GL_TRIANGLES, (this.numEntities + this.numBackground) * 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, (this.entities.length + 1) * 6, GL_UNSIGNED_INT, 0);
 
         // Unbind.
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
+
+        for (int i=0; i < textures.size(); i++) {
+            textures.get(i).unbind();
+        }
 
         shader.unbind();
 
@@ -144,10 +185,27 @@ public class RenderBatch {
         int offset = index * 4 * VERTEX_SIZE;
         
         Vector4f color = entity.getColor();
+        Vector2f[] texCoords = entity.getTexCoords();
+
+        int texId = 0;
+
+        // Loop through textures we have loaded to find the right one for this entity object.
+        if (entity.getTexture() != null) {
+            for (int i=0; i < textures.size(); i++) {
+                if (textures.get(i) == entity.getTexture()) {
+                    texId = i + 1;
+                    break;
+                }
+            }
+
+        }
+        
 
         // Add vertice with the appropriate properties.
         float xAdd = 1.0f;
         float yAdd = 1.0f;
+
+        // Loop through each vertex where i is = to current vertex.
         for (int i=0; i < 4; i++) {
             if (i ==1) {
                 yAdd = 0.0f;
@@ -167,9 +225,22 @@ public class RenderBatch {
             vertices[offset + 4] = color.z;
             vertices[offset + 5] = color.w;
 
+            // Load texture coords.
+            vertices[offset + 6] = texCoords[i].x;
+            vertices[offset + 7] = texCoords[i].y;
+
+
+            // Load texture id.
+            vertices[offset + 8] = texId;
+
+
             offset += VERTEX_SIZE;
         }
-    }   
+    } 
+    
+    private void loadVertexProperties(Background background) {
+        
+    }
 
     private int[] generateIndices() {
         // 6 indices per quad (3 per triangle)
@@ -185,8 +256,10 @@ public class RenderBatch {
         int offsetArrayIndex = 6 * index;
         int offset = 4 * index;
 
+        // ===========================================
         // Tri 1                    Tri 2
         // 3, 2, 0, 0, 2, 1         7, 6, 4, 4, 6, 5
+        // ===========================================
 
         // Tri 1
         elements[offsetArrayIndex] = offset + 3;
@@ -197,7 +270,6 @@ public class RenderBatch {
         elements[offsetArrayIndex + 3] = offset + 0;
         elements[offsetArrayIndex + 4] = offset + 2;
         elements[offsetArrayIndex + 5] = offset + 1;
-
     }
 
     public  boolean hasRoom() {

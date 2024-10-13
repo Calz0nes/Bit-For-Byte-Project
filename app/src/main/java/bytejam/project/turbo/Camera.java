@@ -36,6 +36,6 @@ public class Camera {
     }
 
     public void setCamPosition(Vector2f nextPos) {
-        position = nextPos;
+        this.position = nextPos;
     }
 }

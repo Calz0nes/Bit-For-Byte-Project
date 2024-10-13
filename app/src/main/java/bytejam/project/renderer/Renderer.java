@@ -7,7 +7,7 @@ import bytejam.project.turbo.goc.Background;
 import bytejam.project.turbo.goc.Entity;
 
 public class Renderer {
-    private final int MAX_BATCH_SIZE = 1000;
+    private final int MAX_BATCH_SIZE = 100;
     private List<RenderBatch> batches;
 
     public Renderer() {

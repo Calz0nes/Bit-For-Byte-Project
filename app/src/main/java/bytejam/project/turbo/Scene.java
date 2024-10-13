@@ -1,9 +1,10 @@
 package bytejam.project.turbo;
 
-import bytejam.project.turbo.goc.Collision;
+import bytejam.project.renderer.Renderer;
 
 public abstract class Scene {
 
+    protected Renderer renderer;
     protected Camera camera;
 
     //Scenes contain our objects, renderer, physics.
@@ -15,5 +16,9 @@ public abstract class Scene {
     public abstract void init();
 
     public abstract void update(float dt);
+
+    public Camera camera() {
+        return this.camera;
+    }
 
 }

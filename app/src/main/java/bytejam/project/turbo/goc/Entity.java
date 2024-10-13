@@ -3,13 +3,15 @@ package bytejam.project.turbo.goc;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import org.joml.Vector2f;
+import org.joml.Vector4f;
+
 import bytejam.project.renderer.Texture;
 import bytejam.project.turbo.Sound;
 
 public class Entity {
 
     private Point prevPos, nextPos;
-    private String texturePath;
     private Texture texture;
     private Animation[] animations;
     private Sound[] sounds;
@@ -17,16 +19,25 @@ public class Entity {
     private Rectangle hitBox, size;
     private int animationSlot;
     private boolean isDone;
+    private Vector2f[] texCoords;
+    private Vector4f color;
 
-    public Entity(String texturePath, Point initPos, Rectangle size) {
-        this.prevPos = prevPos;
-        this.nextPos = nextPos;
-        this.texturePath = texturePath;
-        this.texture = new Texture(texturePath);
+    /* Draw manually */
+    public Entity(Vector4f color) {
+        this.color = color;
+        this.texture = null;
+    }
+
+    /* Assign texture */
+    public Entity(Texture texture, Point initPos, Rectangle size) {
+        this.prevPos = initPos;
+        this.nextPos = initPos;
+        this.texture = texture;
         this.playerSpeed = 10;
         this.jumpSpeed = 10;
         this.size = size;
         this.isDone = true;
+        this.color = new Vector4f(1, 1, 1, 1);
 
     }
 
@@ -46,12 +57,12 @@ public class Entity {
         this.isDone = animations[animationSlot].bind();
     }
 
-    // Default value is 0;
+    // Default value is 0.
     public void bindAnimation(int slot) {
         this.animationSlot = slot;
     }
 
-    // Int object can't be set to null;
+    // Int object can't be set to null.
     public void unbindAnimation() {
         this.animationSlot = 0;
     }
@@ -75,7 +86,25 @@ public class Entity {
 
     public Rectangle getSize() {
         return size;
-    }    
+    } 
+    
+    public Vector2f[] getTexCoords() {
+        Vector2f[] texCoords = {
+            new Vector2f(1, 1),
+            new Vector2f(1, 0),
+            new Vector2f(0, 1),
+            new Vector2f(0, 0)
+        };
+        return texCoords;
+    }
+    
+    public Texture getTexture() {
+        return this.texture;
+    }
+
+    public Vector4f getColor() {
+        return this.color;
+    }
     
     // Speed is set in pixles per second.
     public void setSpeed(float playerSpeed, float jumpSpeed) {
