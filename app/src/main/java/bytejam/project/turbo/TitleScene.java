@@ -20,15 +20,13 @@ public class TitleScene extends Scene{
     @Override
     public void init() {
         this.camera = new Camera(new Vector2f(0, 0));
-
-        this.testSnail = new Entity(AssetPool.getTexture("assets/images/snail_07.png"), new Point(100, 100), new Rectangle(256, 256));
-        this.testSnail2 = new Entity(AssetPool.getTexture("assets/images/snail_07.png"), new Point(-100, -100), new Rectangle(256, 256));
         this.renderer = new Renderer();
-        
-        renderer.add(testSnail);
-        renderer.add(testSnail2);
-
-
+        for (int n=-10; n <15; n++) {
+            for (int i=-10; i < 55; i++) {
+            renderer.add(new Entity(AssetPool.getTexture("assets/images/snail_07.png"), new Point(i * 25, n * 50), new Rectangle(50, 50)));
+            }
+        }
+    
         loadResources();
     }
 

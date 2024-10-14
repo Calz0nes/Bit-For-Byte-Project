@@ -120,19 +120,19 @@ public class RenderBatch {
         // Get index and add renderObject.
         int index = this.Index;
         this.entities[index] = entity;
+        this.Index += 1;
 
         
         if(entity.getTexture() != null) {
             if (!textures.contains(entity.getTexture())) {
                 textures.add(entity.getTexture());
-                
             }
         }
 
         // Add properties to local vertices array.
         loadVertexProperties(index);
 
-        if (entities.length >= this.maxBatchSize) {
+        if (entities.length >= this.maxBatchSize - 1) {
             this.hasRoom = false;
         }
     }
@@ -233,7 +233,6 @@ public class RenderBatch {
             // Load texture coords.
             vertices[offset + 6] = texCoords[i].x;
             vertices[offset + 7] = texCoords[i].y;
-
 
             // Load texture id.
             vertices[offset + 8] = texId;
