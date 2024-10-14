@@ -19,14 +19,13 @@ public class TitleScene extends Scene{
     public void init() {
         this.camera = new Camera(new Vector2f(0, 0));
 
-        this.testSnail = new Player(AssetPool.getTexture("assets/images/snail_07.png"), new Transform(new Vector2f(100, 100), new Vector2f(256, 256)));
-        this.testSnail2 = new Player(AssetPool.getTexture("assets/images/snail_07.png"), new Transform(new Vector2f(256, 256)));
         this.renderer = new Renderer();
-        
-        renderer.add(testSnail);
-        renderer.add(testSnail2);
-
-
+        for (int n=-10; n <15; n++) {
+            for (int i=-10; i < 55; i++) {
+            renderer.add(new Player(AssetPool.getTexture("assets/images/snail_07.png"), new Transform(new Vector2f(i * 25, n * 50), new Vector2f(50, 50))));
+            }
+        }
+    
         loadResources();
     }
 
