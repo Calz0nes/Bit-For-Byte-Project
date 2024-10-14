@@ -51,6 +51,7 @@ public class RenderBatch {
 
     private Entity[] entities;
     private Background background;
+    private int Index;
     private List<Texture> textures;
     private boolean hasRoom;
     private float[] vertices;
@@ -117,12 +118,14 @@ public class RenderBatch {
 
     public void addEntity(Entity entity) {
         // Get index and add renderObject.
-        int index = this.entities.length -1;
+        int index = this.Index;
         this.entities[index] = entity;
 
+        
         if(entity.getTexture() != null) {
             if (!textures.contains(entity.getTexture())) {
                 textures.add(entity.getTexture());
+                
             }
         }
 
@@ -143,6 +146,7 @@ public class RenderBatch {
     }
 
     public void render() {
+    
         // Set to rebuffer all data every frame.
         glBindBuffer(GL_ARRAY_BUFFER, vaoID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
@@ -175,6 +179,7 @@ public class RenderBatch {
         }
 
         shader.unbind();
+       
 
     }
 
@@ -191,9 +196,9 @@ public class RenderBatch {
 
         // Loop through textures we have loaded to find the right one for this entity object.
         if (entity.getTexture() != null) {
-            for (int i=0; i < textures.size(); i++) {
-                if (textures.get(i) == entity.getTexture()) {
-                    texId = i + 1;
+            for (int t=0; t < textures.size(); t++) {
+                if (textures.get(t) == entity.getTexture()) {
+                    texId = t + 1;
                     break;
                 }
             }
@@ -207,7 +212,7 @@ public class RenderBatch {
 
         // Loop through each vertex where i is = to current vertex.
         for (int i=0; i < 4; i++) {
-            if (i ==1) {
+            if (i == 1) {
                 yAdd = 0.0f;
             } else if (i == 2) {
                 xAdd = 0.0f;
@@ -216,8 +221,8 @@ public class RenderBatch {
             }
 
             // Load position.
-            vertices[offset] = entity.getPos().x + (xAdd * entity.getSize().x);
-            vertices[offset + 1] = entity.getPos().y + (yAdd * entity.getSize().y);
+            vertices[offset] = entity.getPos().x + (xAdd * entity.getSize().width);
+            vertices[offset + 1] = entity.getPos().y + (yAdd * entity.getSize().height);
 
             // Load color.
             vertices[offset + 2] = color.x;
@@ -232,8 +237,10 @@ public class RenderBatch {
 
             // Load texture id.
             vertices[offset + 8] = texId;
-
-
+            for (int n=0; n< 9; n++ ) {
+                System.out.print(vertices[offset + n]);
+                System.out.println();
+            }
             offset += VERTEX_SIZE;
         }
     } 

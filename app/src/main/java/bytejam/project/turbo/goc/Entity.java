@@ -67,14 +67,15 @@ public class Entity {
         this.animationSlot = 0;
     }
 
+    /* 
     public void setPos(Point nextPos) {
         if (new Collision().isEntity(nextPos)) {
-            this.texture.setPos(nextPos);
             prevPos = nextPos;
         } else {
             this.texture.setPos(prevPos);
         }
     }
+    */
 
     public void setSize(Rectangle newSize) {
         size = newSize;
@@ -90,8 +91,8 @@ public class Entity {
     
     public Vector2f[] getTexCoords() {
         Vector2f[] texCoords = {
-            new Vector2f(1, 1),
             new Vector2f(1, 0),
+            new Vector2f(1, 1),
             new Vector2f(0, 1),
             new Vector2f(0, 0)
         };

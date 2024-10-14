@@ -35,8 +35,11 @@
 
     void main() 
     {
-        if (fTexId > 0) {
-            int Id = int(fTexId);
+        
+        int Id = int(fTexId);
+        if (Id != 0) {
             color = fColor * texture(uTextures[Id], fTexCoords);
+        } else {
+            color = fColor;
         }
     }

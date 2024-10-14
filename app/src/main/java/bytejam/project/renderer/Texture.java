@@ -64,6 +64,7 @@ public class Texture {
     }
 
     public void bind() {
+        //System.out.println("something was bound");
         glBindTexture(GL_TEXTURE_2D, texID);
     }
 

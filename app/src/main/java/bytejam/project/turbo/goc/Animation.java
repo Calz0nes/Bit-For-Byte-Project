@@ -18,19 +18,21 @@ public class Animation {
         this.entity = entity;
     }
 
+    /* 
     public void addFrames(String[] texturePaths) {
         for (String f : texturePaths) {
             frames[f.indexOf(f)] = new Texture(f);
             frames[f.indexOf(f)].setSize(entity.getSize());
         }
     }
+    */
 
     public void setSpeed(float delta) {
         delta = delta;
     }
 
     public boolean bind() {
-        frames[prevFrame].setPos(entity.getPos());
+        //frames[prevFrame].setPos(entity.getPos());
         
 
         if ((float)glfwGetTime() - prevTime > delta) {

@@ -10,6 +10,8 @@ import bytejam.project.turbo.goc.Entity;
 import bytejam.project.turbo.util.AssetPool;
 
 public class TitleScene extends Scene{
+    public Entity testSnail;
+    public Entity testSnail2;
 
     public TitleScene() {
 
@@ -19,8 +21,8 @@ public class TitleScene extends Scene{
     public void init() {
         this.camera = new Camera(new Vector2f(0, 0));
 
-        Entity testSnail = new Entity(AssetPool.getTexture("assets/images/snail_07.png"), new Point(0, 0), new Rectangle(256, 256));
-        Entity testSnail2 = new Entity(AssetPool.getTexture("assets/images/snail_07.png"), new Point(-100, -100), new Rectangle(256, 256));
+        this.testSnail = new Entity(AssetPool.getTexture("assets/images/snail_07.png"), new Point(100, 100), new Rectangle(256, 256));
+        this.testSnail2 = new Entity(AssetPool.getTexture("assets/images/snail_07.png"), new Point(-100, -100), new Rectangle(256, 256));
         this.renderer = new Renderer();
         
         renderer.add(testSnail);
