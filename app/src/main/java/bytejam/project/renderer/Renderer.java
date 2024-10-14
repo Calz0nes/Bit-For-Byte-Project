@@ -3,8 +3,7 @@ package bytejam.project.renderer;
 import java.util.ArrayList;
 import java.util.List;
 
-import bytejam.project.turbo.goc.Background;
-import bytejam.project.turbo.goc.Entity;
+import bytejam.project.turbo.game_objects.Entity;
 
 public class Renderer {
     private final int MAX_BATCH_SIZE = 100;
@@ -30,25 +29,6 @@ public class Renderer {
             newBatch.start();
             batches.add(newBatch);
             newBatch.addEntity(entity);
-        }
-    }
-
-    public void add(Background background) {
-        boolean added = false;
-        for (RenderBatch batch : batches) {
-            if (batch.hasRoom()) {
-                batch.addBackground(background);
-                added = true;
-                break;
-            }
-
-        }
-
-        if (!added) {
-            RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE);
-            newBatch.start();
-            batches.add(newBatch);
-            newBatch.addBackground(background);
         }
     }
 

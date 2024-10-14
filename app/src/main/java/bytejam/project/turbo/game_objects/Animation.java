@@ -1,4 +1,4 @@
-package bytejam.project.turbo.goc;
+package bytejam.project.turbo.game_objects;
 
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 

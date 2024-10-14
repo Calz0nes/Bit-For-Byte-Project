@@ -1,4 +1,4 @@
-package bytejam.project.turbo;
+package bytejam.project.turbo.game_objects;
 
 public class Sound {
 

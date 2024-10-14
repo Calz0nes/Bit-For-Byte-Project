@@ -26,8 +26,8 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import bytejam.project.turbo.Window;
-import bytejam.project.turbo.goc.Background;
-import bytejam.project.turbo.goc.Entity;
+import bytejam.project.turbo.game_objects.Background;
+import bytejam.project.turbo.game_objects.Entity;
 import bytejam.project.turbo.util.AssetPool;
 
 public class RenderBatch {
@@ -50,7 +50,6 @@ public class RenderBatch {
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
     private Entity[] entities;
-    private Background background;
     private int Index;
     private List<Texture> textures;
     private boolean hasRoom;
@@ -66,7 +65,7 @@ public class RenderBatch {
         this.shader = AssetPool.getShader("assets/shaders/default.glsl");
 
         // Max amount of entities minus one for the background.
-        this.entities = new Entity[maxBatchSize - 1];
+        this.entities = new Entity[maxBatchSize];
         this.textures = new ArrayList<>();
 
         this.maxBatchSize = maxBatchSize;
@@ -120,12 +119,12 @@ public class RenderBatch {
         // Get index and add renderObject.
         int index = this.Index;
         this.entities[index] = entity;
+        this.Index += 1;
 
         
         if(entity.getTexture() != null) {
             if (!textures.contains(entity.getTexture())) {
                 textures.add(entity.getTexture());
-                
             }
         }
 
@@ -135,14 +134,6 @@ public class RenderBatch {
         if (entities.length >= this.maxBatchSize) {
             this.hasRoom = false;
         }
-    }
-
-    public void addBackground(Background background) {
-        // Get index and add renderObject.
-        this.background = background;
-
-        // Add properties to local vertices array.
-        loadVertexProperties(background);
     }
 
     public void render() {
@@ -167,7 +158,7 @@ public class RenderBatch {
         glEnableVertexAttribArray(1);
 
         // Render.
-        glDrawElements(GL_TRIANGLES, (this.entities.length + 1) * 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, (this.entities.length) * 6, GL_UNSIGNED_INT, 0);
 
         // Unbind.
         glDisableVertexAttribArray(0);
@@ -221,8 +212,8 @@ public class RenderBatch {
             }
 
             // Load position.
-            vertices[offset] = entity.getPos().x + (xAdd * entity.getSize().width);
-            vertices[offset + 1] = entity.getPos().y + (yAdd * entity.getSize().height);
+            vertices[offset] = entity.getPos().x + (xAdd * entity.getSize().x);
+            vertices[offset + 1] = entity.getPos().y + (yAdd * entity.getSize().y);
 
             // Load color.
             vertices[offset + 2] = color.x;
