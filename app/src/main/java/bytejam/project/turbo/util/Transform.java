@@ -23,7 +23,7 @@ public class Transform {
 
     public Transform(Vector2f Size) {
         this.Center = this.defaultCenter;
-        this.Size = this.Size;
+        this.Size = Size;
         this.isCircle = this.defaultIsCircle;
     }
 

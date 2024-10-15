@@ -10,9 +10,9 @@ public class Background extends Entity{
 
     private final Vector4f defaultColor = new Vector4f(1, 1, 1, 1);
 
-    private Texture texture;
+    private final Texture texture;
     private Vector4f Color;
-    private Transform transform;
+    private final Transform transform;
 
     /* Draw Manually */
     public Background(Vector4f Color, Transform transform) {
@@ -62,16 +62,4 @@ public class Background extends Entity{
     public void setColor(Vector4f newColor) {
         this.Color = newColor;
     }
-
-    @Override
-    public void Bind() {
-        texture.bind();
-    }
-
-    @Override
-    public void unBind() {
-        texture.unbind();
-    }
-
-
 }

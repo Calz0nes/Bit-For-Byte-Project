@@ -7,13 +7,14 @@ import java.util.Map;
 import bytejam.project.renderer.Shader;
 import bytejam.project.renderer.Texture;
 
-/* This function exists to manage all of our recources as well as 
- * making sure that Java does not ever delete them. Doing this reduces 
- * large lag spikes by making sure every resource is loaded and ready.
- */
+/* =======================================================================
+ *  This function exists to manage all of our recources as well as 
+ *  making sure that Java does not ever delete them. Doing this reduces 
+ *  large lag spikes by making sure every resource is loaded and ready.
+ *///=====================================================================
 public class AssetPool {
-    private static Map<String, Shader> shaders = new HashMap<>();
-    private static Map<String, Texture> textures = new HashMap<>();
+    private static final Map<String, Shader> shaders = new HashMap<>();
+    private static final Map<String, Texture> textures = new HashMap<>();
 
     public static Shader getShader(String resourceName) {
         File file = new File(resourceName);

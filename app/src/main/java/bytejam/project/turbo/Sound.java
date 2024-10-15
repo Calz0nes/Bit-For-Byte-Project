@@ -1,8 +1,9 @@
-package bytejam.project.turbo.game_objects;
+package bytejam.project.turbo;
 
 public class Sound {
 
-    private String filePath;
+    @SuppressWarnings("unused")
+    private final String filePath;
 
     public Sound(String filePath) {
         this.filePath = filePath;

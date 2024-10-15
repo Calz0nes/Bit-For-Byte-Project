@@ -26,16 +26,17 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import bytejam.project.turbo.Window;
-import bytejam.project.turbo.game_objects.Background;
 import bytejam.project.turbo.game_objects.Entity;
 import bytejam.project.turbo.util.AssetPool;
 
 public class RenderBatch {
-    //                               Attribute Map
-    // ==========================================================================
-    // Pos               Color                          tex coords        tex id
-    // float, float,     float, float, float, float     float, float,     float
-    // ==========================================================================
+    
+    /*                            Attribute Map
+     * ===========================================================================
+     *  Pos               Color                          tex coords        tex id
+     *  float, float,     float, float, float, float     float, float,     float
+     * ===========================================================================
+     */
     
     private final int POS_SIZE = 2;
     private final int COLOR_SIZE = 4;
@@ -49,16 +50,16 @@ public class RenderBatch {
     private final int VERTEX_SIZE = 9;
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
-    private Entity[] entities;
+    private final Entity[] entities;
     private int Index;
-    private List<Texture> textures;
+    private final List<Texture> textures;
     private boolean hasRoom;
-    private float[] vertices;
-    private int[] texSlots = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    private final float[] vertices;
+    private final int[] texSlots = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
     private int vaoID, vboID;
-    private int maxBatchSize;
-    private Shader shader;
+    private final int maxBatchSize;
+    private final Shader shader;
 
     public RenderBatch(int maxBatchSize) {
         // Always pull shader object from assetpool to reduce lag.
@@ -203,12 +204,12 @@ public class RenderBatch {
 
         // Loop through each vertex where i is = to current vertex.
         for (int i=0; i < 4; i++) {
-            if (i == 1) {
-                yAdd = 0.0f;
-            } else if (i == 2) {
-                xAdd = 0.0f;
-            } else if (i == 3) {
-                yAdd = 1.0f;
+            switch (i) {
+                case 1 -> yAdd = 0.0f;
+                case 2 -> xAdd = 0.0f;
+                case 3 -> yAdd = 1.0f;
+                default -> {
+                }
             }
 
             // Load position.
@@ -227,17 +228,17 @@ public class RenderBatch {
 
             // Load texture id.
             vertices[offset + 8] = texId;
+
+            /* Debug.
             for (int n=0; n< 9; n++ ) {
                 System.out.print(vertices[offset + n]);
                 System.out.println();
             }
+            */
+
             offset += VERTEX_SIZE;
         }
     } 
-    
-    private void loadVertexProperties(Background background) {
-        
-    }
 
     private int[] generateIndices() {
         // 6 indices per quad (3 per triangle)

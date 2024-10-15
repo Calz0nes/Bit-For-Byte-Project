@@ -24,10 +24,6 @@ public abstract class Entity {
     
     public abstract void setColor(Vector4f newColor);
 
-    public abstract void Bind();
-    
-    public abstract void unBind();
-
     public Vector2f[] getTexCoords() {
         Vector2f[] texCoords = {
             new Vector2f(1, 0),

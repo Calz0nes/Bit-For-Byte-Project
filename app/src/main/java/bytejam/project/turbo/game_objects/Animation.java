@@ -6,16 +6,15 @@ import bytejam.project.renderer.Texture;
 
 public class Animation {
 
-    private float prevTime, delta;
-    private int prevFrame;
-    private Texture[] frames;
-    private Entity entity;
+    private float Time;
+    private float delta;
+    private int Frame;
+    private final Texture[] frames;
 
-    public Animation(Entity entity) {
+    public Animation() {
         frames = new Texture[10];
-        prevTime = (float)glfwGetTime();
-        prevFrame = 0;
-        this.entity = entity;
+        Time = (float)glfwGetTime();
+        Frame = 0;
     }
 
     /* 
@@ -28,32 +27,32 @@ public class Animation {
     */
 
     public void setSpeed(float delta) {
-        delta = delta;
+        this.delta = delta;
     }
 
     public boolean bind() {
         //frames[prevFrame].setPos(entity.getPos());
         
 
-        if ((float)glfwGetTime() - prevTime > delta) {
-            frames[prevFrame].bind();
+        if ((float)glfwGetTime() - Time > delta) {
+            frames[Frame].bind();
 
-            prevTime = (float)glfwGetTime();
-            prevFrame += 1;
-            if (prevFrame == frames.length) {
-                prevFrame = 0;
+            Time = (float)glfwGetTime();
+            Frame += 1;
+            if (Frame == frames.length) {
+                Frame = 0;
                 return true;
             } else {
                 return false;
             }
         } else {
-            frames[prevFrame].bind();
+            frames[Frame].bind();
             return false;
         }
     }
 
     public void unbind() {
-        frames[prevFrame].unbind();
+        frames[Frame].unbind();
     }
 }
 

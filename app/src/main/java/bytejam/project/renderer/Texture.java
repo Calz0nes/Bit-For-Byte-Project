@@ -22,8 +22,9 @@ import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_load;
 
 public class Texture {
-    private String filepath;
-    private int texID;
+    @SuppressWarnings("unused")
+    private final String filepath;
+    private final int texID;
 
     public Texture(String filepath) {
         this.filepath = filepath;

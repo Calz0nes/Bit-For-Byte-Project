@@ -9,8 +9,8 @@ import bytejam.project.turbo.util.Transform;
 public class Projectile extends Entity {
     private final Vector4f defaultColor = new Vector4f(1, 1, 1,1);
 
-    private Transform transform;
-    private Texture texture;
+    private final Transform transform;
+    private final Texture texture;
     private Vector4f Color;
 
     /* Draw Manual */
@@ -27,6 +27,7 @@ public class Projectile extends Entity {
         this.transform = transform;
     }
 
+    @Override
     public Vector2f getPos() {
         return transform.Center;
     }
@@ -36,6 +37,7 @@ public class Projectile extends Entity {
         return transform.Size;
     }
 
+    @Override
     public Vector4f getColor() {
         return this.Color;
     }
@@ -44,7 +46,6 @@ public class Projectile extends Entity {
     public Texture getTexture() {
         return texture;
     }
-
 
     @Override
     public void setPos(Vector2f newPos) {
@@ -59,15 +60,5 @@ public class Projectile extends Entity {
     @Override
     public void setColor(Vector4f newColor) {
         this.Color = newColor;
-    }
-
-    @Override
-    public void Bind() {
-        this.texture.bind();
-    }
-
-    @Override
-    public void unBind() {
-        this.texture.unbind();
     }
 }

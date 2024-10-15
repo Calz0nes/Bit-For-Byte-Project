@@ -4,8 +4,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-public class Camera {
-    private Matrix4f projectionMatrix, viewMatrix;
+public final class Camera {
+    private final Matrix4f projectionMatrix, viewMatrix;
     private  Vector2f position;
 
     public Camera(Vector2f position) {

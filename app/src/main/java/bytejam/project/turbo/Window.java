@@ -33,8 +33,8 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
 
-    private int width, height;
-    private String title;
+    private final int width, height;
+    private final String title;
     private long glfwWindow;
 
     private static Window window = null;
@@ -56,25 +56,27 @@ public class Window {
     }
 
     public static Scene getScene() {
-        return get().currentScene;
+        get();
+        return Window.currentScene;
     }
 
     public static void changeScene(int newScene) {
         switch (newScene) {
-            case 0:
+            case 0 -> {
                 currentScene = new TitleScene();
                 currentScene.init();
-                break;
-            case 1:
+            }
+            case 1 -> {
                 currentScene = new PresentScene();
                 currentScene.init();
-                break;
-            default:
+            }
+            default -> {
                 assert false : "Unknown scene '" + newScene + "'";
-                break;      
+            }      
         }
     }
     
+    @SuppressWarnings("null")
     public void run() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
@@ -119,6 +121,7 @@ public class Window {
 
 		// Make the OpenGL context current
 		glfwMakeContextCurrent(glfwWindow);
+
 		// Enable v-sync
 		glfwSwapInterval(1);
 
@@ -161,8 +164,4 @@ public class Window {
             beginTime = endTime;
 		}
     }
-
-
-
-
 }
