@@ -61,4 +61,9 @@ public class Projectile extends Entity {
     public void setColor(Vector4f newColor) {
         this.Color = newColor;
     }
+
+    @Override
+    public Transform getTransform() {
+        return this.transform;
+    }
 }

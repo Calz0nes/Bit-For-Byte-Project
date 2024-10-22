@@ -171,8 +171,6 @@ public class RenderBatch {
         }
 
         shader.unbind();
-       
-
     }
 
     private void loadVertexProperties(int index) {

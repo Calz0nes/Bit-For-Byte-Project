@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import bytejam.project.renderer.Texture;
+import bytejam.project.turbo.util.Transform;
 
 public abstract class Entity {
 
@@ -17,6 +18,8 @@ public abstract class Entity {
     public abstract Vector2f getSize();
 
     public abstract Vector4f getColor();
+
+    public abstract Transform getTransform();
 
     public abstract void setPos(Vector2f newPos);
 
