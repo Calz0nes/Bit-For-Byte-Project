@@ -30,7 +30,7 @@ public class Texture {
         this.filepath = filepath;
 
         // Generate texture on GPU
-        texID = glGenTextures();
+        this.texID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texID);
 
         // Set texture parameters.
@@ -62,6 +62,10 @@ public class Texture {
 
         stbi_image_free(image);
 
+    }
+
+    public int getTexId() {
+        return this.texID;
     }
 
     public void bind() {

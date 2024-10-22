@@ -25,6 +25,7 @@ public class Renderer {
         }
 
         if (!added) {
+            System.out.println("NEW!");
             RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE);
             newBatch.start();
             batches.add(newBatch);

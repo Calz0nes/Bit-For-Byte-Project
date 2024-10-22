@@ -50,7 +50,7 @@ public class RenderBatch {
     private final int VERTEX_SIZE = 9;
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
-    private final Entity[] entities;
+    private List<Entity> entities;
     private int Index;
     private final List<Texture> textures;
     private boolean hasRoom;
@@ -65,8 +65,7 @@ public class RenderBatch {
         // Always pull shader object from assetpool to reduce lag.
         this.shader = AssetPool.getShader("assets/shaders/default.glsl");
 
-        // Max amount of entities minus one for the background.
-        this.entities = new Entity[maxBatchSize];
+        this.entities = new ArrayList<>();
         this.textures = new ArrayList<>();
 
         this.maxBatchSize = maxBatchSize;
@@ -118,27 +117,29 @@ public class RenderBatch {
 
     public void addEntity(Entity entity) {
         // Get index and add renderObject.
-        int index = this.Index;
-        this.entities[index] = entity;
-        this.Index += 1;
+        this.entities.add(Index, entity);
 
-        
         if(entity.getTexture() != null) {
             if (!textures.contains(entity.getTexture())) {
                 textures.add(entity.getTexture());
             }
+
         }
 
         // Add properties to local vertices array.
-        loadVertexProperties(index);
+        loadVertexProperties(this.Index);
 
-        if (entities.length >= this.maxBatchSize - 1) {
+        this.Index++;
+
+        if (entities.size() >= this.maxBatchSize) {
             this.hasRoom = false;
         }
     }
 
     public void render() {
-    
+        for (int i=0; i < this.Index; i++) {
+            reloadPosVert(i);
+        }
         // Set to rebuffer all data every frame.
         glBindBuffer(GL_ARRAY_BUFFER, vaoID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
@@ -159,7 +160,7 @@ public class RenderBatch {
         glEnableVertexAttribArray(1);
 
         // Render.
-        glDrawElements(GL_TRIANGLES, (this.entities.length) * 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, (this.entities.size()) * 6, GL_UNSIGNED_INT, 0);
 
         // Unbind.
         glDisableVertexAttribArray(0);
@@ -176,7 +177,7 @@ public class RenderBatch {
     }
 
     private void loadVertexProperties(int index) {
-        Entity entity = this.entities[index];
+        Entity entity = this.entities.get(index);
 
         // Find offset within array (4 vertices per sprite)
         int offset = index * 4 * VERTEX_SIZE;
@@ -229,16 +230,44 @@ public class RenderBatch {
             // Load texture id.
             vertices[offset + 8] = texId;
 
-            /* Debug.
-            for (int n=0; n< 9; n++ ) {
-                System.out.print(vertices[offset + n]);
-                System.out.println();
-            }
-            */
+            
+            //for (int n=0; n< 9; n++ ) {
+            //    System.out.print(vertices[offset + n]);
+            //    System.out.println();
+            //}
+            
 
             offset += VERTEX_SIZE;
         }
     } 
+
+    private void reloadPosVert(int index) {
+        Entity entity = this.entities.get(index);
+
+        // Find offset within array (4 vertices per sprite)
+        int offset = index * 4 * VERTEX_SIZE;
+
+        // Add vertice with the appropriate properties.
+        float xAdd = 1.0f;
+        float yAdd = 1.0f;
+
+        // Loop through each vertex where i is = to current vertex.
+        for (int i=0; i < 4; i++) {
+            switch (i) {
+                case 1 -> yAdd = 0.0f;
+                case 2 -> xAdd = 0.0f;
+                case 3 -> yAdd = 1.0f;
+                default -> {
+                }
+            }
+
+            // Load position.
+            vertices[offset] = entity.getPos().x + (xAdd * entity.getSize().x);
+            vertices[offset + 1] = entity.getPos().y + (yAdd * entity.getSize().y);
+
+            offset += VERTEX_SIZE;
+        }
+    }
 
     private int[] generateIndices() {
         // 6 indices per quad (3 per triangle)
