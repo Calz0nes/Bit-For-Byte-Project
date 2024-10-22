@@ -36,6 +36,7 @@ public class Shader {
     /* Creates shader class. */
     public Shader(String filepath) {
 
+        
         this.filepath = filepath;
         try {
             String source = new String(Files.readAllBytes(Paths.get(filepath)));
@@ -138,6 +139,7 @@ public class Shader {
         glUseProgram(0);
     }
 
+    // Camera projection.
     public void uploadMat4f(String varName, Matrix4f mat4) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
         FloatBuffer matBuffer = BufferUtils.createFloatBuffer(16);
@@ -145,12 +147,14 @@ public class Shader {
         glUniformMatrix4fv(varLocation, false, matBuffer);
     }
 
+    // Upload one texture.
     public void uploadTexture(String varName, int slot) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
         bind();
         glUniform1i(varLocation, slot);
     }
     
+    // Upload many textures.
     public void uploadIntArray(String varName, int[] array) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
         bind();

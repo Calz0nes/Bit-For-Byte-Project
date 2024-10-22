@@ -98,6 +98,11 @@ public class Player extends Entity {
         this.color = newColor;
     }
 
+    @Override
+    public Transform getTransform() {
+        return this.transform;
+    }
+
     /* 
     public boolean isHit(Projectile projectile) {
         if (projectile.isInside()) {
