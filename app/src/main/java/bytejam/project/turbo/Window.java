@@ -70,6 +70,10 @@ public class Window {
                 currentScene = new PresentScene();
                 currentScene.init();
             }
+            case 2 -> {
+                currentScene = new ExampleScean();
+                currentScene.init();
+            }
             default -> {
                 assert false : "Unknown scene '" + newScene + "'";
             }      
@@ -131,7 +135,7 @@ public class Window {
 
         GL.createCapabilities();
 
-        changeScene(0);
+        changeScene(2);
         
     }
 
