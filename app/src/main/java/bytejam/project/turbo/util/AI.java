@@ -77,7 +77,7 @@ public class AI {
             }
         }
     }
-
+    // ME TO CADEL I LOVE GAMBLING THATS WHY I HAVE NO MONEY 
     // I LOVE GAMBLING!
     private boolean Chance(int PercentChance) {
         // 60 (fps) * 100 / percent chance per second.
@@ -104,7 +104,7 @@ public class AI {
         } else if (nextPos.y < -1 * (gameArea.Size.y/2 + gameArea.Center.y)) {
             nextPos.y = -1 * (gameArea.Size.y/2 + gameArea.Center.y);
         }
-
+        // BOOOOO
         entities.get(index).setPos(nextPos);
     }
 }
