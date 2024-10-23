@@ -156,9 +156,9 @@ public class Window {
         alcMakeContextCurrent(audioContext);
 
         ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);
-        ALCapabilities alcCapabilities = AL.createCapabilities(alcCapabilities);
+        ALCapabilities alcCapabilities = AL.checkCapabilities(alcCapabilities);
 
-        If (!alcCapabilities.OpenAL10) {
+        if (!alcCapabilities.OpenAL10) {
             assert false : "Audio library not supported.";
         }
         
@@ -170,26 +170,6 @@ public class Window {
 
         changeScene(2);
         
-    }
-
-    private void alcMakeContextCurrent(long audioContext2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'alcMakeContextCurrent'");
-    }
-
-    private long alcCreateContext(long audioDevice2, int[] attributes) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'alcCreateContext'");
-    }
-
-    private long alcOpenDevice(String defaultDeviceName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'alcOpenDevice'");
-    }
-
-    private string alcGetString(int i, String alcDefaultDeviceSpecifier) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'alcGetString'");
     }
 
     // This line is critical for LWJGL's interoperation with GLFW's

@@ -1,7 +1,8 @@
 package bytejam.project.turbo;
-
+//import static org.lwjgl.stb.*;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+
 
 public class Sound {
     private int bufferId;
@@ -13,7 +14,7 @@ public class Sound {
 
     public Sound(String filePath, boolean loops) {
         this.filePath = filePath;
-
+// 
         // Allocate space to store the return information from stb
         stackPush();
         IntBuffer channelsBuffer = stackMallocInt(1);
@@ -23,36 +24,60 @@ public class Sound {
         ShortBuffer rawAudioBuffer = stb_vorbis_decode_filename(filePath, channelsBuffer, sampleRateBuffer);
 
 
+
         if (rawAudioBuffer == null){
             System.out.println("could not load sound'" + filePath + "'");
             stackPop();
             stackPop();
             return;
         }
+
+        // Retrieve the extra information that was stored in the buffers by stb
+        int channels = channelsBuffer.get();
+        int sampleRate = sampleRateBuffer.get();
+        // free
+        stackPop();
+        stackPop();
+
+        //find the correct openAL format
+        int format = -1;
+        if (channels == 1) {
+            format = Al_FORMAT_MONO16;
+        } else if (channels == 2) {
+            format =Al_FORMAT_MONO16;
+        }
+
+        bufferId = alGenBuffers();
+        alBufferData(bufferId, format, rawAudioBuffer, sampleRate);
+
+// all of them lol
+        // generate the source 
+        sourceID = alGenSources();
+
+        alsourcei(soureId, AL_BUFFER, bufferId);
+        alsourcei(sourceId, AL_LOOPING, loops ? 1: 0);
+        alsourcei(sourceId, Al_POSITION, 0);
+        alsourcef(soureId, AL_GAIN, 0.3f );
+
+
+        //free stb raw audio buffer
+        free(rawAudioBuffer);
     }
 
-    private void stackPop() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'stackPop'");
-    }
-
-    private ShortBuffer stb_vorbis_decode_filename(String filePath2, IntBuffer channelsBuffer,
-            IntBuffer sampleRateBuffer) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'stb_vorbis_decode_filename'");
-    }
-
-    private IntBuffer stackMallocInt(int i) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'stackMallocInt'");
-    }
-
-    private void stackPush() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'stackPush'");
+    public void delete() {
+        alDeleteSources(soureId);
+        alDeleteBuffers(bufferId);
     }
 
     public void play() {
+        int state = alGetSourcei(soureId, AL_SOURVE_STATE);
+        if (state == AL_STOPPED) {
+            alSourcei(soureId, Al_POSITION, 0);
+        }
 
     }
+
+
+
+ 
 }
