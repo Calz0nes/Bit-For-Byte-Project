@@ -3,6 +3,26 @@ package bytejam.project.turbo;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
+import static org.lwjgl.openal.AL10.AL_BUFFER;
+import static org.lwjgl.openal.AL10.AL_FORMAT_MONO16;
+import static org.lwjgl.openal.AL10.AL_LOOPING;
+import static org.lwjgl.openal.AL10.AL_POSITION;
+import static org.lwjgl.openal.AL10.AL_SOURCE_STATE;
+import static org.lwjgl.openal.AL10.AL_STOPPED;
+import static org.lwjgl.openal.AL10.alBufferData;
+import static org.lwjgl.openal.AL10.alDeleteBuffers;
+import static org.lwjgl.openal.AL10.alDeleteSources;
+import static org.lwjgl.openal.AL10.alGenBuffers;
+import static org.lwjgl.openal.AL10.alGenSources;
+import static org.lwjgl.openal.AL10.alGetSourcei;
+import static org.lwjgl.openal.AL10.alSourcef;
+import static org.lwjgl.openal.AL10.alSourcei;
+import static org.lwjgl.stb.STBVorbis.stb_vorbis_decode_filename;
+import static org.lwjgl.system.MemoryStack.stackMallocInt;
+import static org.lwjgl.system.MemoryStack.stackPop;
+import static org.lwjgl.system.MemoryStack.stackPush;
+import static org.lwjgl.system.libc.LibCStdlib.free;
+
 
 public class Sound {
     private int bufferId;
@@ -42,21 +62,21 @@ public class Sound {
         //find the correct openAL format
         int format = -1;
         if (channels == 1) {
-            format = Al_FORMAT_MONO16;
+            format = AL_FORMAT_MONO16;
         } else if (channels == 2) {
-            format =Al_FORMAT_MONO16;
+            format = AL_FORMAT_MONO16;
         }
 
         bufferId = alGenBuffers();
         alBufferData(bufferId, format, rawAudioBuffer, sampleRate);
 
         // generate the source 
-        sourceID = alGenSources();
+        int sourceId = alGenSources();
 
-        alsourcei(soureId, AL_BUFFER, bufferId);
-        alsourcei(sourceId, AL_LOOPING, loops ? 1: 0);
-        alsourcei(sourceId, Al_POSITION, 0);
-        alsourcef(soureId, AL_GAIN, 0.3f );
+        alSourcei(soureId, AL_BUFFER, bufferId);
+        alSourcei(sourceId, AL_LOOPING, loops ? 1: 0);
+        alSourcei(sourceId, AL_POSITION, 0);
+        alSourcef(sourceId, format, format);(soureId, AL_GAIN, 0.3f );
 
 
         //free stb raw audio buffer
@@ -69,9 +89,9 @@ public class Sound {
     }
 
     public void play() {
-        int state = alGetSourcei(soureId, AL_SOURVE_STATE);
+        int state = alGetSourcei(soureId, AL_SOURCE_STATE);
         if (state == AL_STOPPED) {
-            alSourcei(soureId, Al_POSITION, 0);
+            alSourcei(soureId, AL_POSITION, 0);
         }
 
     }
