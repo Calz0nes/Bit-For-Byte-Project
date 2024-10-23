@@ -27,6 +27,11 @@ import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
+import static org.lwjgl.openal.ALC10.alcCreateContext;
+
+import static org.lwjgl.openal.ALC10.alcGetString;
+import static org.lwjgl.openal.ALC10.alcMakeContextCurrent;
+import static org.lwjgl.openal.ALC10.alcOpenDevice;
 import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.openal.ALCapabilities;
 import org.lwjgl.opengl.GL;
@@ -147,6 +152,7 @@ public class Window {
 		glfwShowWindow(glfwWindow);
 
         //Initalize the audio device
+
         String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
         audioDevice = alcOpenDevice(defaultDeviceName);
 

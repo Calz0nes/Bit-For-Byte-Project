@@ -62,8 +62,7 @@ public class Cursor extends Entity{
 
     @Override
     public Transform getTransform() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTransform'");
+        return this.transform;
     }
 
 }
