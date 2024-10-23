@@ -14,7 +14,7 @@ public class Sound {
 
     public Sound(String filePath, boolean loops) {
         this.filePath = filePath;
-// 
+ 
         // Allocate space to store the return information from stb
         stackPush();
         IntBuffer channelsBuffer = stackMallocInt(1);
@@ -50,7 +50,6 @@ public class Sound {
         bufferId = alGenBuffers();
         alBufferData(bufferId, format, rawAudioBuffer, sampleRate);
 
-// all of them lol
         // generate the source 
         sourceID = alGenSources();
 
