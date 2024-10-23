@@ -60,4 +60,10 @@ public class Cursor extends Entity{
         this.Color = newColor;
     }
 
+    @Override
+    public Transform getTransform() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getTransform'");
+    }
+
 }

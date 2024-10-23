@@ -25,6 +25,10 @@ import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.openal.AL;
+import org.lwjgl.openal.ALC;
+import org.lwjgl.openal.ALCCapabilities;
+import org.lwjgl.openal.ALCapabilities;
 import org.lwjgl.opengl.GL;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
@@ -33,12 +37,16 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
 
+    private static final String ALC_DEFAULT_DEVICE_SPECIFIER = null;
     private final int width, height;
     private final String title;
     private long glfwWindow;
 
     private static Window window = null;
     private static Scene currentScene = null;
+
+    private long audioContext;
+    private long audioDevice;
 
     private Window() {
         this.width = 1920;
@@ -87,6 +95,12 @@ public class Window {
         init();
         loop();
 
+        //destroy the audio context
+        //ps i don't think you need the lines below
+        
+        //alcDestroyContext(audioContext);
+        //alcCloseDevice(audioDevice);
+
         // Free the memory.
         glfwFreeCallbacks(glfwWindow);
         glfwDestroyWindow(glfwWindow);
@@ -132,11 +146,50 @@ public class Window {
 		// Make the window visible
 		glfwShowWindow(glfwWindow);
 
+        //Initalize the audio device
+        String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
+        audioDevice = alcOpenDevice(defaultDeviceName);
+
+
+        int[] attributes = {0};
+        audioContext = alcCreateContext(audioDevice, attributes);
+        alcMakeContextCurrent(audioContext);
+
+        ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);
+        ALCapabilities alcCapabilities = AL.createCapabilities(alcCapabilities);
+
+        If (!alcCapabilities.OpenAL10) {
+            assert false : "Audio library not supported.";
+        }
+        
+        
+        
+        // YOU MOM IS GAY
 
         GL.createCapabilities();
 
         changeScene(2);
         
+    }
+
+    private void alcMakeContextCurrent(long audioContext2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'alcMakeContextCurrent'");
+    }
+
+    private long alcCreateContext(long audioDevice2, int[] attributes) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'alcCreateContext'");
+    }
+
+    private long alcOpenDevice(String defaultDeviceName) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'alcOpenDevice'");
+    }
+
+    private string alcGetString(int i, String alcDefaultDeviceSpecifier) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'alcGetString'");
     }
 
     // This line is critical for LWJGL's interoperation with GLFW's
