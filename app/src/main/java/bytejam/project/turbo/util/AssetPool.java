@@ -52,7 +52,7 @@ public class AssetPool {
             return sounds.get(file.getAbsolutePath());
 
         } else {
-            assert false : "Sound file not addeed '" + soundFile + "'";
+            assert false : "Sound file not added '" + soundFile + "'";
         }
 
         return null;
@@ -62,12 +62,10 @@ public class AssetPool {
         File file = new File(soundFile);
         if (sounds.containsKey(file.getAbsolutePath())) {
             return sounds.get(file.getAbsolutePath());
-
         } else {
           Sound sound = new Sound(file.getAbsolutePath(), loops);
           AssetPool.sounds.put(file.getAbsolutePath(), sound);
           return sound;
         }
-
     }
 }

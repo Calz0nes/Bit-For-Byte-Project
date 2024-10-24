@@ -3,6 +3,7 @@ package bytejam.project.turbo;
 import org.lwjgl.Version;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_MAXIMIZED;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
@@ -48,6 +49,8 @@ public class Window {
     private final String title;
     private long glfwWindow;
 
+    private boolean isPresent;
+
     private static Window window = null;
     private static Scene currentScene = null;
 
@@ -85,7 +88,7 @@ public class Window {
                 currentScene.init();
             }
             case 2 -> {
-                currentScene = new ExampleScean();
+                currentScene = new ExampleScene();
                 currentScene.init();
             }
             default -> {
@@ -153,6 +156,7 @@ public class Window {
         //Initalize the audio device.
 
         String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
+
         audioDevice = alcOpenDevice(defaultDeviceName);
 
         int[] attributes = {0};
@@ -167,7 +171,6 @@ public class Window {
         }
 
         GL.createCapabilities();
-
         changeScene(2);
     }
 
@@ -191,6 +194,16 @@ public class Window {
 
             if (dt >= 0) {
                 currentScene.update(dt);
+            }
+
+            if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+                if (isPresent) {
+                    changeScene(2);
+                    isPresent = false;
+                } else if (isPresent == false) {
+                    changeScene(0); 
+                    isPresent = true;
+                }
             }
             
             glfwSwapBuffers(glfwWindow);

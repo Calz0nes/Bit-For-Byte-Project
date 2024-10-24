@@ -5,6 +5,7 @@ import java.nio.ShortBuffer;
 
 import static org.lwjgl.openal.AL10.AL_BUFFER;
 import static org.lwjgl.openal.AL10.AL_FORMAT_MONO16;
+import static org.lwjgl.openal.AL10.AL_FORMAT_STEREO16;
 import static org.lwjgl.openal.AL10.AL_GAIN;
 import static org.lwjgl.openal.AL10.AL_LOOPING;
 import static org.lwjgl.openal.AL10.AL_POSITION;
@@ -65,7 +66,7 @@ public class Sound {
         if (channels == 1) {
             format = AL_FORMAT_MONO16;
         } else if (channels == 2) {
-            format = AL_FORMAT_MONO16;
+            format = AL_FORMAT_STEREO16;
         }
 
         bufferId = alGenBuffers();
@@ -78,7 +79,6 @@ public class Sound {
         alSourcei(sourceId, AL_LOOPING, loops ? 1: 0);
         alSourcei(sourceId, AL_POSITION, 0);
         alSourcef(sourceId, AL_GAIN, 0.3f);
-
 
         //free stb raw audio buffer.
         free(rawAudioBuffer);
@@ -100,7 +100,7 @@ public class Sound {
             isPlaying = true;
         }
     }
- 
+
     public void stop(){
         if (isPlaying) {
             alSourceStop(sourceId);
