@@ -97,7 +97,7 @@ public class Sound {
         if (state == AL_STOPPED) {
             alSourcei(soureId, AL_POSITION, 0);
         }
-
+    }
     
 
     if (!isPlaying) {
@@ -106,22 +106,22 @@ public class Sound {
     }
 
  
-        public void stop(){
-            if (isPlaying) {
-                alSourceStop(soureId);;
-                isPlaying = false;
-            }
-        }
-
-        public String getFilepath() {
-            return this.filePath;
-        }
-
-        public boolean isPlaying() {
-            int state = alGetSourcei(soureId, AL_SOURCE_STATE);
-            if (state == AL_STOPPED) {
-                isPlaying = false;
-            }
-            return isPlaying;
-        }
+    public voind stop(){
+        if (isPlaying) {
+            alSourceStop(soureId);;
+            isPlaying = false;
+         }
     }
+
+    public String getFilepath() {
+        return this.filePath;
+    }
+
+    public boolean isPlaying() {
+        int state = alGetSourcei(soureId, AL_SOURCE_STATE);
+        if (state == AL_STOPPED) {
+            isPlaying = false;
+        }
+        return isPlaying;
+    }
+}
