@@ -29,24 +29,22 @@ import static org.lwjgl.system.libc.LibCStdlib.free;
 
 public class Sound {
     private int bufferId;
-    private int soureId;
-    private String filepath;
+    private int sourceId;
+
+    private final String filepath;
+
     private boolean isPlaying = false;
 
-    private final String filePath;
-
     public Sound(String filePath, boolean loops) {
-        this.filePath = filePath;
+        this.filepath = filePath;
  
-        // Allocate space to store the return information from stb
+        // Allocate space to store the return information from stb.
         stackPush();
         IntBuffer channelsBuffer = stackMallocInt(1);
         stackPush();
         IntBuffer sampleRateBuffer = stackMallocInt(1);
 
         ShortBuffer rawAudioBuffer = stb_vorbis_decode_filename(filePath, channelsBuffer, sampleRateBuffer);
-
-
 
         if (rawAudioBuffer == null){
             System.out.println("could not load sound'" + filePath + "'");
@@ -55,14 +53,14 @@ public class Sound {
             return;
         }
 
-        // Retrieve the extra information that was stored in the buffers by stb
+        // Retrieve the extra information that was stored in the buffers by stb.
         int channels = channelsBuffer.get();
         int sampleRate = sampleRateBuffer.get();
         // free
         stackPop();
         stackPop();
 
-        //find the correct openAL format
+        //find the correct openAL format.
         int format = -1;
         if (channels == 1) {
             format = AL_FORMAT_MONO16;
@@ -73,49 +71,49 @@ public class Sound {
         bufferId = alGenBuffers();
         alBufferData(bufferId, format, rawAudioBuffer, sampleRate);
 
-        // generate the source 
+        // generate the source.
         int sourceId = alGenSources();
 
-        alSourcei(soureId, AL_BUFFER, bufferId);
+        alSourcei(sourceId, AL_BUFFER, bufferId);
         alSourcei(sourceId, AL_LOOPING, loops ? 1: 0);
         alSourcei(sourceId, AL_POSITION, 0);
         alSourcef(sourceId, AL_GAIN, 0.3f);
 
 
-        //free stb raw audio buffer
+        //free stb raw audio buffer.
         free(rawAudioBuffer);
     }
 
     public void delete() {
-        alDeleteSources(soureId);
+        alDeleteSources(sourceId);
         alDeleteBuffers(bufferId);
     }
 
     public void play() {
-        int state = alGetSourcei(soureId, AL_SOURCE_STATE);
+        int state = alGetSourcei(sourceId, AL_SOURCE_STATE);
         if (state == AL_STOPPED) {
-            alSourcei(soureId, AL_POSITION, 0);
+            alSourcei(sourceId, AL_POSITION, 0);
         }
 
         if (!isPlaying) {
-            alSourcePlay(soureId);
+            alSourcePlay(sourceId);
             isPlaying = true;
         }
     }
  
     public void stop(){
         if (isPlaying) {
-            alSourceStop(soureId);;
+            alSourceStop(sourceId);
             isPlaying = false;
          }
     }
 
     public String getFilepath() {
-        return this.filePath;
+        return this.filepath;
     }
 
     public boolean isPlaying() {
-        int state = alGetSourcei(soureId, AL_SOURCE_STATE);
+        int state = alGetSourcei(sourceId, AL_SOURCE_STATE);
         if (state == AL_STOPPED) {
             isPlaying = false;
         }

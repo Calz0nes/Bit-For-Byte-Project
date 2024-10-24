@@ -17,6 +17,7 @@ public class ExampleScean extends Scene{
     private Background background;
     private Player player;
     private Vector2f Pose;
+    private Sound sound;
     private final float Speed = 10;
    
     @Override
@@ -27,13 +28,16 @@ public class ExampleScean extends Scene{
         this.renderer = new Renderer();
         this.player = new Player(AssetPool.getTexture("assets/images/snail_07.png"), new Transform(new Vector2f(50, 50)));
         this.background = new Background(AssetPool.getTexture("assets/images/GameBackground.jpg"), new Transform(new Vector2f(20, -400),new Vector2f(1200, 2100)));
-
+        
+        sound = new Sound("assets/sounds/descontamination-chamber-sound-effect-35985.ogg", true);
         renderer.add(background);
         renderer.add(player);
     }
 
     @Override
     public void update(float dt) {
+
+        sound.play();
         
         if (KeyListener.isKeyPressed(GLFW_KEY_W)) {
             Pose.y += Speed;

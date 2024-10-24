@@ -28,7 +28,9 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
 import static org.lwjgl.openal.ALC10.ALC_DEFAULT_DEVICE_SPECIFIER;
+import static org.lwjgl.openal.ALC10.alcCloseDevice;
 import static org.lwjgl.openal.ALC10.alcCreateContext;
+import static org.lwjgl.openal.ALC10.alcDestroyContext;
 import static org.lwjgl.openal.ALC10.alcGetString;
 import static org.lwjgl.openal.ALC10.alcMakeContextCurrent;
 import static org.lwjgl.openal.ALC10.alcOpenDevice;
@@ -100,10 +102,8 @@ public class Window {
         loop();
 
         //destroy the audio context
-        //ps i don't think you need the lines below
-        
-        //alcDestroyContext(audioContext);
-        //alcCloseDevice(audioDevice);
+        alcDestroyContext(audioContext);
+        alcCloseDevice(audioDevice);
 
         // Free the memory.
         glfwFreeCallbacks(glfwWindow);
@@ -150,11 +150,10 @@ public class Window {
 		// Make the window visible
 		glfwShowWindow(glfwWindow);
 
-        //Initalize the audio device
+        //Initalize the audio device.
 
         String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
         audioDevice = alcOpenDevice(defaultDeviceName);
-
 
         int[] attributes = {0};
         audioContext = alcCreateContext(audioDevice, attributes);
@@ -163,18 +162,13 @@ public class Window {
         ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);
         ALCapabilities alCapabilities = AL.createCapabilities(alcCapabilities);
 
-        if (!alcCapabilities.OpenALC10) {
+        if (!alCapabilities.OpenAL10) {
            assert false : "Audio library not supported.";
         }
-        
-        
-        
-        // YOU MOM IS GAY
 
         GL.createCapabilities();
 
         changeScene(2);
-        
     }
 
     // This line is critical for LWJGL's interoperation with GLFW's
