@@ -79,8 +79,7 @@ public class Sound {
         alSourcei(soureId, AL_BUFFER, bufferId);
         alSourcei(sourceId, AL_LOOPING, loops ? 1: 0);
         alSourcei(sourceId, AL_POSITION, 0);
-        alSourcei(sourceId, AL_GAIN, 0.3f);
-        //alSourcef(sourceId, format, format);(soureId, AL_GAIN, 0.3f );
+        alSourcef(sourceId, AL_GAIN, 0.3f);
 
 
         //free stb raw audio buffer
@@ -97,16 +96,14 @@ public class Sound {
         if (state == AL_STOPPED) {
             alSourcei(soureId, AL_POSITION, 0);
         }
-    }
-    
 
-    if (!isPlaying) {
-        alSourcePlay(soureId);
-        isPlaying = true;
+        if (!isPlaying) {
+            alSourcePlay(soureId);
+            isPlaying = true;
+        }
     }
-
  
-    public voind stop(){
+    public void stop(){
         if (isPlaying) {
             alSourceStop(soureId);;
             isPlaying = false;

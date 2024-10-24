@@ -1,10 +1,9 @@
 package bytejam.project.turbo.util;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.google.thirdparty.publicsuffix.PublicSuffixPatterns;
 
 import bytejam.project.renderer.Shader;
 import bytejam.project.renderer.Texture;

@@ -27,8 +27,8 @@ import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
+import static org.lwjgl.openal.ALC10.ALC_DEFAULT_DEVICE_SPECIFIER;
 import static org.lwjgl.openal.ALC10.alcCreateContext;
-
 import static org.lwjgl.openal.ALC10.alcGetString;
 import static org.lwjgl.openal.ALC10.alcMakeContextCurrent;
 import static org.lwjgl.openal.ALC10.alcOpenDevice;
@@ -42,7 +42,6 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
 
-    private static final String ALC_DEFAULT_DEVICE_SPECIFIER = null;
     private final int width, height;
     private final String title;
     private long glfwWindow;
@@ -153,20 +152,20 @@ public class Window {
 
         //Initalize the audio device
 
-        //String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
-       // audioDevice = alcOpenDevice(defaultDeviceName);
+        String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
+        audioDevice = alcOpenDevice(defaultDeviceName);
 
 
-        //int[] attributes = {0};
-        //audioContext = alcCreateContext(audioDevice, attributes);
-        //alcMakeContextCurrent(audioContext);
+        int[] attributes = {0};
+        audioContext = alcCreateContext(audioDevice, attributes);
+        alcMakeContextCurrent(audioContext);
 
-        //ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);
-        //ALCapabilities alcCapabilities = AL.checkCapabilities(alcCapabilities);
+        ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);
+        ALCapabilities alCapabilities = AL.createCapabilities(alcCapabilities);
 
-       // if (!alcCapabilities.OpenAL10) {
-       //     assert false : "Audio library not supported.";
-        //}
+        if (!alcCapabilities.OpenALC10) {
+           assert false : "Audio library not supported.";
+        }
         
         
         
