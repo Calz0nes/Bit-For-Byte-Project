@@ -5,6 +5,7 @@ import java.nio.ShortBuffer;
 
 import static org.lwjgl.openal.AL10.AL_BUFFER;
 import static org.lwjgl.openal.AL10.AL_FORMAT_MONO16;
+import static org.lwjgl.openal.AL10.AL_GAIN;
 import static org.lwjgl.openal.AL10.AL_LOOPING;
 import static org.lwjgl.openal.AL10.AL_POSITION;
 import static org.lwjgl.openal.AL10.AL_SOURCE_STATE;
@@ -15,6 +16,8 @@ import static org.lwjgl.openal.AL10.alDeleteSources;
 import static org.lwjgl.openal.AL10.alGenBuffers;
 import static org.lwjgl.openal.AL10.alGenSources;
 import static org.lwjgl.openal.AL10.alGetSourcei;
+import static org.lwjgl.openal.AL10.alSourcePlay;
+import static org.lwjgl.openal.AL10.alSourceStop;
 import static org.lwjgl.openal.AL10.alSourcef;
 import static org.lwjgl.openal.AL10.alSourcei;
 import static org.lwjgl.stb.STBVorbis.stb_vorbis_decode_filename;
@@ -76,7 +79,8 @@ public class Sound {
         alSourcei(soureId, AL_BUFFER, bufferId);
         alSourcei(sourceId, AL_LOOPING, loops ? 1: 0);
         alSourcei(sourceId, AL_POSITION, 0);
-        alSourcef(sourceId, format, format);(soureId, AL_GAIN, 0.3f );
+        alSourcei(sourceId, AL_GAIN, 0.3f);
+        //alSourcef(sourceId, format, format);(soureId, AL_GAIN, 0.3f );
 
 
         //free stb raw audio buffer
@@ -94,9 +98,30 @@ public class Sound {
             alSourcei(soureId, AL_POSITION, 0);
         }
 
+    
+
+    if (!isPlaying) {
+        alSourcePlay(soureId);
+        isPlaying = true;
     }
 
-
-
  
-}
+        public void stop(){
+            if (isPlaying) {
+                alSourceStop(soureId);;
+                isPlaying = false;
+            }
+        }
+
+        public String getFilepath() {
+            return this.filePath;
+        }
+
+        public boolean isPlaying() {
+            int state = alGetSourcei(soureId, AL_SOURCE_STATE);
+            if (state == AL_STOPPED) {
+                isPlaying = false;
+            }
+            return isPlaying;
+        }
+    }

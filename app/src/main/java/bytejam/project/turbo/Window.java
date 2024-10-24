@@ -153,20 +153,20 @@ public class Window {
 
         //Initalize the audio device
 
-        String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
-        audioDevice = alcOpenDevice(defaultDeviceName);
+        //String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
+       // audioDevice = alcOpenDevice(defaultDeviceName);
 
 
-        int[] attributes = {0};
-        audioContext = alcCreateContext(audioDevice, attributes);
-        alcMakeContextCurrent(audioContext);
+        //int[] attributes = {0};
+        //audioContext = alcCreateContext(audioDevice, attributes);
+        //alcMakeContextCurrent(audioContext);
 
-        ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);
-        ALCapabilities alcCapabilities = AL.checkCapabilities(alcCapabilities);
+        //ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);
+        //ALCapabilities alcCapabilities = AL.checkCapabilities(alcCapabilities);
 
-        if (!alcCapabilities.OpenAL10) {
-            assert false : "Audio library not supported.";
-        }
+       // if (!alcCapabilities.OpenAL10) {
+       //     assert false : "Audio library not supported.";
+        //}
         
         
         
