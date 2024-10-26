@@ -3,7 +3,6 @@ package bytejam.project.turbo;
 import org.lwjgl.Version;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_MAXIMIZED;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
@@ -82,14 +81,17 @@ public class Window {
             case 0 -> {
                 currentScene = new TitleScene();
                 currentScene.init();
+                System.out.println("TitleScene");
             }
             case 1 -> {
                 currentScene = new PresentScene();
                 currentScene.init();
+                System.out.println("pressentScene");
             }
             case 2 -> {
                 currentScene = new ExampleScene();
                 currentScene.init();
+                System.out.println("currentScene");
             }
             default -> {
                 assert false : "Unknown scene '" + newScene + "'";
@@ -97,7 +99,6 @@ public class Window {
         }
     }
     
-    @SuppressWarnings("null")
     public void run() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
@@ -194,16 +195,6 @@ public class Window {
 
             if (dt >= 0) {
                 currentScene.update(dt);
-            }
-
-            if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
-                if (isPresent) {
-                    changeScene(2);
-                    isPresent = false;
-                } else if (isPresent == false) {
-                    changeScene(0); 
-                    isPresent = true;
-                }
             }
             
             glfwSwapBuffers(glfwWindow);

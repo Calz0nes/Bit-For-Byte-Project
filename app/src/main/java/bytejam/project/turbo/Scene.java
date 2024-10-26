@@ -1,10 +1,8 @@
 package bytejam.project.turbo;
 
-import bytejam.project.renderer.Renderer;
-
 public abstract class Scene {
 
-    protected Renderer renderer;
+    //protected Renderer renderer;
     protected Camera camera;
 
     //Scenes contain our objects, renderer, physics.

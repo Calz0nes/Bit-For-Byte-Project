@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 
 import bytejam.project.renderer.Renderer;
@@ -15,11 +16,16 @@ import bytejam.project.turbo.util.Transform;
 public class ExampleScene extends Scene{
 
     private Background background;
+    private Renderer renderer;
     private Player player;
     private Vector2f Pose;
     private Sound sound;
     private final float Speed = 10;
-   
+    
+    public ExampleScene() {
+
+    }
+
     @Override
     public void init() {
         this.camera = new Camera(new Vector2f(0, 0));
@@ -36,7 +42,7 @@ public class ExampleScene extends Scene{
 
     @Override
     public void update(float dt) {
-
+        Window.get();
         
 
         sound.play();
@@ -55,6 +61,10 @@ public class ExampleScene extends Scene{
         
         if (KeyListener.isKeyPressed(GLFW_KEY_D)) {
             Pose.x += Speed;
+        }
+
+        if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+            Window.changeScene(0);
         }
 
         player.setPos(this.Pose);
