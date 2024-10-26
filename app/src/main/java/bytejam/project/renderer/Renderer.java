@@ -32,6 +32,14 @@ public class Renderer {
         }
     }
 
+    public void remove(Entity entity) {
+        for (RenderBatch batch : batches) {
+            if (batch.hasEntity(entity)) {
+                batch.remove(entity);
+            }
+        }
+    }
+
     public void render() {
         for (RenderBatch batch : batches) {
             batch.render();

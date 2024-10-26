@@ -51,9 +51,9 @@ public class RenderBatch {
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
     private List<Entity> entities;
-    private int Index;
     private final List<Texture> textures;
     private boolean hasRoom;
+    private boolean vertexChange;
     private final float[] vertices;
     private final int[] texSlots = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
@@ -74,6 +74,8 @@ public class RenderBatch {
         this.vertices = new float[maxBatchSize * 4 * VERTEX_SIZE];
 
         this.hasRoom = true;
+
+        this.vertexChange = false;
     }
 
     public void start() {
@@ -113,12 +115,17 @@ public class RenderBatch {
         // Assign texture id.
         glVertexAttribPointer(3, TEX_ID_SiZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEX_ID_OFFSET);
         glEnableVertexAttribArray(3);
+
+        for (Entity e: entities) {
+        // Add properties to local vertices array.
+        loadVertexProperties(entities.indexOf(e));
+        }
     }
 
     public void addEntity(Entity entity) {
         // Get index and add renderObject.
-        this.entities.add(Index, entity);
-
+        this.entities.add(entity);
+        
         if(entity.getTexture() != null) {
             if (!textures.contains(entity.getTexture())) {
                 textures.add(entity.getTexture());
@@ -126,20 +133,35 @@ public class RenderBatch {
 
         }
 
-        // Add properties to local vertices array.
-        loadVertexProperties(this.Index);
-
-        this.Index++;
+        // Tell render that the vertexes have changed and it should recalc.
+        this.vertexChange = true;
 
         if (entities.size() >= this.maxBatchSize) {
             this.hasRoom = false;
         }
     }
 
+    public void remove(Entity entity) {
+        entities.remove(entity);
+
+        // Tell render that the vertexes have changed and it should recalc.
+        this.vertexChange = true;
+    }
+
     public void render() {
-        for (int i=0; i < this.Index; i++) {
-            reloadPosVert(i);
+        if (vertexChange) {
+            for (Entity e: entities) {
+                // Re-calc vertexes.
+                loadVertexProperties(entities.indexOf(e));
+            }
+            vertexChange = false;
+        } else {
+            for (Entity e: entities) {
+                // Only re-calc position and textures.
+                reloadPosVert(entities.indexOf(e));
+            }
         }
+
         // Set to rebuffer all data every frame.
         glBindBuffer(GL_ARRAY_BUFFER, vaoID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
@@ -265,7 +287,7 @@ public class RenderBatch {
 
             offset += VERTEX_SIZE;
         }
-    }
+    } 
 
     private int[] generateIndices() {
         // 6 indices per quad (3 per triangle)
@@ -295,6 +317,10 @@ public class RenderBatch {
         elements[offsetArrayIndex + 3] = offset + 0;
         elements[offsetArrayIndex + 4] = offset + 2;
         elements[offsetArrayIndex + 5] = offset + 1;
+    }
+
+    public boolean hasEntity(Entity entity) {
+        return entities.contains(entity);
     }
 
     public  boolean hasRoom() {
