@@ -1,7 +1,6 @@
 package bytejam.project.turbo;
 
 import org.joml.Vector2f;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 
 import bytejam.project.renderer.Renderer;
 import bytejam.project.turbo.game_objects.Player;
@@ -36,9 +35,7 @@ public class TitleScene extends Scene{
     @Override
     public void update(float dt) {
 
-        if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
-            Window.changeScene(0);
-        }
+       
         // Render new frame.
         this.renderer.render();
     }

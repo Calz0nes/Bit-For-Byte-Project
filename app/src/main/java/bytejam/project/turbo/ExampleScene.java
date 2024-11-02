@@ -4,7 +4,6 @@ import org.joml.Vector2f;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 
 import bytejam.project.renderer.Renderer;
@@ -42,8 +41,6 @@ public class ExampleScene extends Scene{
 
     @Override
     public void update(float dt) {
-        Window.get();
-        
 
         sound.play();
         
@@ -61,10 +58,6 @@ public class ExampleScene extends Scene{
         
         if (KeyListener.isKeyPressed(GLFW_KEY_D)) {
             Pose.x += Speed;
-        }
-
-        if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
-            Window.changeScene(0);
         }
 
         player.setPos(this.Pose);

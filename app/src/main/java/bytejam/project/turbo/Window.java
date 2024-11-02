@@ -3,6 +3,7 @@ package bytejam.project.turbo;
 import org.lwjgl.Version;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_MAXIMIZED;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
@@ -78,24 +79,25 @@ public class Window {
 
     public static void changeScene(int newScene) {
         switch (newScene) {
-            case 0 -> {
+            case 0:
                 currentScene = new TitleScene();
                 currentScene.init();
                 System.out.println("TitleScene");
-            }
-            case 1 -> {
+                break;
+            case 1:
                 currentScene = new PresentScene();
                 currentScene.init();
                 System.out.println("pressentScene");
-            }
-            case 2 -> {
+                break;
+            case 2:
                 currentScene = new ExampleScene();
                 currentScene.init();
                 System.out.println("currentScene");
-            }
-            default -> {
+                break;
+            default:
                 assert false : "Unknown scene '" + newScene + "'";
-            }      
+                break;
+                  
         }
     }
     
@@ -172,7 +174,7 @@ public class Window {
         }
 
         GL.createCapabilities();
-        changeScene(2);
+        Window.changeScene(2);
     }
 
     // This line is critical for LWJGL's interoperation with GLFW's
@@ -183,7 +185,7 @@ public class Window {
     public void loop() {
         float beginTime = (float)glfwGetTime(); //Time when frame started.
         float endTime; //Time when frame ended.
-        float dt = -1.0f;
+        float dt = -3.0f;
 
         while ( !glfwWindowShouldClose(glfwWindow) ) {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
@@ -193,9 +195,16 @@ public class Window {
             //glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+                Window.changeScene(0);
+            } else {
+                Window.changeScene(1);
+            }
+
             if (dt >= 0) {
                 currentScene.update(dt);
             }
+
             
             glfwSwapBuffers(glfwWindow);
 
