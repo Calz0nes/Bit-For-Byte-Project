@@ -114,14 +114,14 @@ public class EnemyManager {
     private void entityMove(Vector2f nextPos, int index) {
         if (nextPos.x > gameArea.Size.x/2 + gameArea.Center.x) {
             nextPos.x = gameArea.Size.x/2 + gameArea.Center.x;
-        } else if (nextPos.x < -1 * (gameArea.Size.x/2 + gameArea.Center.x)) {
-            nextPos.x = -1 * (gameArea.Size.x/2 + gameArea.Center.x);
+        } else if (nextPos.x < (-1 * gameArea.Size.x/2) + gameArea.Center.x) {
+            nextPos.x = (-1 * gameArea.Size.x/2) + gameArea.Center.x;
         }
 
         if (nextPos.y > gameArea.Size.y/2 + gameArea.Center.y) {
             nextPos.y = gameArea.Size.y/2 + gameArea.Center.y;
-        } else if (nextPos.y < -1 * (gameArea.Size.y/2 + gameArea.Center.y)) {
-            nextPos.y = -1 * (gameArea.Size.y/2 + gameArea.Center.y);
+        } else if (nextPos.y < (-1 * gameArea.Size.y/2) + gameArea.Center.y) {
+            nextPos.y = (-1 * gameArea.Size.y/2) + gameArea.Center.y;
         }
 
         entities.get(index).setPos(nextPos);

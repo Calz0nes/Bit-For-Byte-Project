@@ -15,7 +15,6 @@ import bytejam.project.turbo.util.Transform;
 public class ExampleScene extends Scene{
 
     private Background background;
-    private Renderer renderer;
     private Player player;
     private Vector2f Pose;
     private Sound sound;

@@ -9,7 +9,7 @@ import bytejam.project.turbo.util.Transform;
 
 public class TitleScene extends Scene{
     public Player player;
-    public Renderer renderer;
+
 
     public TitleScene() {
         

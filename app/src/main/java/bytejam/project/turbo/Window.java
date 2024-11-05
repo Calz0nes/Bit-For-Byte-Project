@@ -3,7 +3,6 @@ package bytejam.project.turbo;
 import org.lwjgl.Version;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_MAXIMIZED;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
@@ -82,17 +81,14 @@ public class Window {
             case 0:
                 currentScene = new TitleScene();
                 currentScene.init();
-                System.out.println("TitleScene");
                 break;
             case 1:
-                currentScene = new PresentScene();
+                currentScene = new gameScene();
                 currentScene.init();
-                System.out.println("pressentScene");
                 break;
             case 2:
                 currentScene = new ExampleScene();
                 currentScene.init();
-                System.out.println("currentScene");
                 break;
             default:
                 assert false : "Unknown scene '" + newScene + "'";
@@ -174,7 +170,7 @@ public class Window {
         }
 
         GL.createCapabilities();
-        Window.changeScene(2);
+        changeScene(1);
     }
 
     // This line is critical for LWJGL's interoperation with GLFW's
@@ -194,12 +190,6 @@ public class Window {
 
             //glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
-
-            if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
-                Window.changeScene(0);
-            } else {
-                Window.changeScene(1);
-            }
 
             if (dt >= 0) {
                 currentScene.update(dt);
