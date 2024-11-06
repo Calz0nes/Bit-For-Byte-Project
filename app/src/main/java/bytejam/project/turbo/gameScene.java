@@ -6,13 +6,16 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 
 import bytejam.project.renderer.Renderer;
+import static bytejam.project.turbo.Window.get;
 import bytejam.project.turbo.game_objects.Background;
+import bytejam.project.turbo.game_objects.Cursor;
 import bytejam.project.turbo.game_objects.Player;
 import bytejam.project.turbo.util.AssetPool;
 import bytejam.project.turbo.util.Transform;
 
 public class gameScene extends Scene{
     private Background background;
+    private Cursor cursor;
     private Player player;
     private Sound sound;
     private final float Speed = 10;
@@ -20,7 +23,7 @@ public class gameScene extends Scene{
     private Vector2f Pose;
     private Vector2f V;
     private final float frictionSpeed = 7;
-    private final float gravity = 7;
+    private final float gravity = 0.7f;
     private final Transform gameArea = new Transform(new Vector2f(600, 1050),new Vector2f(1200, 2100));
     
     public gameScene() {
@@ -35,17 +38,20 @@ public class gameScene extends Scene{
 
 
         this.renderer = new Renderer();
+        this.cursor = new Cursor(AssetPool.getTexture("assets/images/Crosshair.png"), new Transform(new Vector2f(30, 30)));
         this.player = new Player(AssetPool.getTexture("assets/images/snail_07.png"), new Transform(new Vector2f(50, 50)));
         this.background = new Background(AssetPool.getTexture("assets/images/GameBackground.jpg"), new Transform(new Vector2f(20, -400),new Vector2f(1200, 2100)));
         
         sound = new Sound("assets/sounds/file_example_OOG_1MG.ogg", true);
+        
+        renderer.add(cursor);
         renderer.add(background);
         renderer.add(player);
     }
 
     @Override
     public void update(float dt) {
-
+        get();
         sound.play();
         
         
@@ -55,12 +61,14 @@ public class gameScene extends Scene{
             } else {
                 V.y -= gravity;
             } 
-        }
+        } else {
+            V.y -= gravity;
+        } 
         
         if (KeyListener.isKeyPressed(GLFW_KEY_A)) {
             V.x = -Speed;
         } else {
-            if (V.x <= 0) {
+            if (V.x < 0) {
                 V.x += frictionSpeed;
             }
         }
@@ -68,7 +76,7 @@ public class gameScene extends Scene{
         if (KeyListener.isKeyPressed(GLFW_KEY_D)) {
             V.x = Speed;
         } else {
-            if (V.x >= 0) {
+            if (V.x > 0) {
                 V.x -= frictionSpeed;
             }
         }
@@ -77,6 +85,7 @@ public class gameScene extends Scene{
         
     
         playerBounderies(Pose);
+        cursor.setPos(new Vector2f(MouseListener.getX(), MouseListener.getY()));
 
         renderer.render();
     }
@@ -96,10 +105,9 @@ public class gameScene extends Scene{
         }
 
         player.setPos(nextPos);
-        System.out.println("Pos (" + nextPos.x + ","+ nextPos.y + ")");
     }
 
     private boolean isOnFloor() {
-        return Pose.x == (-1 * gameArea.Size.y/2) + gameArea.Center.y;
+        return Pose.y <= (-1 * gameArea.Size.y/2) + gameArea.Center.y;
     }
 }

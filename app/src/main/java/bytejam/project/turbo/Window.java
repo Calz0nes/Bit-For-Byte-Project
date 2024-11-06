@@ -59,7 +59,7 @@ public class Window {
     private Window() {
         this.width = 1920;
         this.height = 1080;
-        this.title = "Game Name";
+        this.title = "Dave's Adventure Through Time";
 
     }
 

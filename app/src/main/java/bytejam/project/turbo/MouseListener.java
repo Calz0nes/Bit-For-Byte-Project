@@ -52,7 +52,7 @@ public class MouseListener {
     }
 
     public static float getY() {
-        return (float)get().yPos;
+        return -1 * (float)get().yPos;
     }
 
     public static float getDx() {
