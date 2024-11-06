@@ -40,6 +40,9 @@ public class gameScene extends Scene{
         this.renderer = new Renderer();
         this.cursor = new Cursor(AssetPool.getTexture("assets/images/Crosshair.png"), new Transform(new Vector2f(30, 30)));
         this.player = new Player(AssetPool.getTexture("assets/images/snail_07.png"), new Transform(new Vector2f(50, 50)));
+
+        this.player = new Player(AssetPool.getTexture("assets/images/Dave2.png"), new Transform(new Vector2f(50, 50)));
+
         this.background = new Background(AssetPool.getTexture("assets/images/GameBackground.jpg"), new Transform(new Vector2f(20, -400),new Vector2f(1200, 2100)));
         
         sound = new Sound("assets/sounds/file_example_OOG_1MG.ogg", true);
