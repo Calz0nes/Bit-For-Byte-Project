@@ -3,6 +3,7 @@ package bytejam.project.turbo;
 import org.lwjgl.Version;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_Y;
 import static org.lwjgl.glfw.GLFW.GLFW_MAXIMIZED;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
@@ -76,7 +77,7 @@ public class Window {
         return Window.currentScene;
     }
 
-    public static void changeScene(int newScene) {
+    public void changeScene(int newScene) {
         switch (newScene) {
             case 0:
                 currentScene = new TitleScene();
@@ -170,6 +171,7 @@ public class Window {
         }
 
         GL.createCapabilities();
+        
         changeScene(1);
     }
 
@@ -193,6 +195,10 @@ public class Window {
 
             if (dt >= 0) {
                 currentScene.update(dt);
+            }
+
+            if (KeyListener.isKeyPressed(GLFW_KEY_Y)) {
+                changeScene(2);
             }
 
             
