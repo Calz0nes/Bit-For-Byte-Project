@@ -18,6 +18,7 @@ public class ExampleScene extends Scene{
     private Player player;
     private Vector2f Pose;
     private Sound sound;
+    private Renderer renderer;
     private final float Speed = 10;
     
     public ExampleScene() {
@@ -36,6 +37,9 @@ public class ExampleScene extends Scene{
         sound = new Sound("assets/sounds/file_example_OOG_1MG.ogg", true);
         renderer.add(background);
         renderer.add(player);
+
+        renderer.start();
+        loadResources();
     }
 
     @Override
@@ -62,6 +66,11 @@ public class ExampleScene extends Scene{
         player.setPos(this.Pose);
 
         renderer.render();
+    }
+
+    // Load resources during init to reduce lag.
+    public void loadResources() {
+        AssetPool.getShader("assets/shaders/default.glsl");
     }
 
 }

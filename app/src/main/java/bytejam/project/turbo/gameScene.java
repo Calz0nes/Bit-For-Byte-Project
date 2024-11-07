@@ -25,6 +25,7 @@ public class gameScene extends Scene{
     private final float frictionSpeed = 1.2f;
     private final float gravity = 0.7f;
     private final Transform gameArea = new Transform(new Vector2f(600, 1050),new Vector2f(1200, 2100));
+    private Renderer renderer;
     
     public gameScene() {
 
@@ -49,6 +50,9 @@ public class gameScene extends Scene{
         renderer.add(cursor);
         renderer.add(background);
         renderer.add(player);
+
+        renderer.start();
+        loadResources();
     }
 
     @Override
@@ -110,5 +114,10 @@ public class gameScene extends Scene{
 
     private boolean isOnFloor() {
         return Pose.y <= (-1 * gameArea.Size.y/2) + gameArea.Center.y;
+    }
+
+    // Load resources during init to reduce lag.
+    public void loadResources() {
+        AssetPool.getShader("assets/shaders/default.glsl");
     }
 }

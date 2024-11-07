@@ -1,5 +1,4 @@
 package bytejam.project.turbo;
-//import static org.lwjgl.stb.*;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import org.joml.Vector2f;
-import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 import bytejam.project.renderer.Renderer;
 import bytejam.project.renderer.Texture;
@@ -44,7 +43,6 @@ public class EnemyManager {
     }
 
     public boolean goNext(ProjectileManager targetProjectileManager) {
-        float time = (float)glfwGetTime();
         Vector2f nextPos = new Vector2f();
 
         Transform targetTransform = new Transform(target.getPos(), agroRadius);

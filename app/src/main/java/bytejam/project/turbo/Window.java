@@ -49,8 +49,6 @@ public class Window {
     private final String title;
     private long glfwWindow;
 
-    private boolean isPresent;
-
     private static Window window = null;
     private static Scene currentScene = null;
 
