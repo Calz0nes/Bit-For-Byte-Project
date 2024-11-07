@@ -40,12 +40,9 @@ public class Renderer {
         }
     }
 
-    public void render() {
+    public void render(int intBatch) {
         System.out.println(batches.size());
-        for (RenderBatch batch : batches) {
-            batch.render();
-            
-        }
+        batches.get(intBatch).render();
     }
 
 }

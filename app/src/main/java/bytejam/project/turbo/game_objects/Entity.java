@@ -8,6 +8,23 @@ import bytejam.project.turbo.util.Transform;
 
 public abstract class Entity {
 
+    Vector2f[] texCoordsRight = {
+        new Vector2f(1, 0),
+        new Vector2f(1, 1),
+        new Vector2f(0, 1),
+        new Vector2f(0, 0)
+    };
+
+    Vector2f[] texCoordsLeft = {
+        new Vector2f(0, 0),
+        new Vector2f(0, 1),
+        new Vector2f(1, 1),
+        new Vector2f(1, 0)
+    };
+
+    boolean isRight;
+
+    
     public Entity() {
     }
 
@@ -27,14 +44,20 @@ public abstract class Entity {
     
     public abstract void setColor(Vector4f newColor);
 
+    public void setLeft() {
+        isRight = false;
+    }
+
+    public void setRight() {
+        isRight = true;
+    }
+
     public Vector2f[] getTexCoords() {
-        Vector2f[] texCoords = {
-            new Vector2f(1, 0),
-            new Vector2f(1, 1),
-            new Vector2f(0, 1),
-            new Vector2f(0, 0)
-        };
-        return texCoords;
+       if (isRight) {
+            return texCoordsRight; 
+       } else {
+            return texCoordsRight;
+       }
     }
 
 

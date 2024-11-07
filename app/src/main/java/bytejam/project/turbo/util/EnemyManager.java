@@ -17,7 +17,6 @@ public class EnemyManager {
     private final int agroRadius = 15; // Radius in pixles
     private final int agroSpeed = 15;
     private final int randAttack = 10; // % chance per second.
-    private final int attackDurration = 2; // Durration of agro in seconds.
     private final int speed = 15;
 
     private final Renderer renderer;
@@ -103,11 +102,7 @@ public class EnemyManager {
         int rand = new Random().nextInt(60 * 100/PercentChance);
         
         // Check to see if rand = 0 because if 100% chance then rand can only = 0.
-        if (rand == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return rand == 0;
     }
 
     // Makes sure that the entity stays inside the game area.
