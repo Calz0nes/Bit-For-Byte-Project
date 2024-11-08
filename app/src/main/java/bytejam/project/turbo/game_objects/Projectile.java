@@ -14,10 +14,9 @@ public class Projectile extends Entity {
 
     private float V;
     private Vector2f vAdd;
-    private Transform targetTransform;
-    private Transform entityTransform;
-    private Transform transform;
-    private Texture texture;
+    private final Transform targetTransform;
+    private final Transform transform;
+    private final Texture texture;
     private Vector4f Color;
 
     /* Draw Manual */
@@ -25,7 +24,8 @@ public class Projectile extends Entity {
         this.texture = null;
         this.Color = Color;
         this.targetTransform = targetTransform;
-        this.entityTransform = entityTransform;
+        this.transform = entityTransform;
+        this.vAdd = new Vector2f(0,0);
         this.V = defualtV;
         plot();
     }
@@ -35,7 +35,8 @@ public class Projectile extends Entity {
         this.texture = texture;
         this.Color = defaultColor;
         this.targetTransform = targetTransform;
-        this.entityTransform = entityTransform;
+        this.transform = entityTransform;
+        this.vAdd = new Vector2f(0,0);
         this.V = defualtV;
         plot();
     }
@@ -85,7 +86,7 @@ public class Projectile extends Entity {
     }
 
     private void plot() {
-        float angle = entityTransform.Center.angle(targetTransform.Center);
+        float angle = transform.Center.angle(targetTransform.Center);
 
         float xAdd = (float)Math.cos(V/60 * angle);
         float yAdd = (float)Math.sin(V/60 * angle);
@@ -94,6 +95,6 @@ public class Projectile extends Entity {
     }
 
     public void goNext() {
-        this.entityTransform.Center.add(vAdd);
+        this.transform.Center.add(vAdd);
     }
 }

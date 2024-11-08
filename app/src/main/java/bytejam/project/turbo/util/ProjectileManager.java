@@ -46,11 +46,15 @@ public class ProjectileManager {
 
     // Goes to the next 
     public boolean goNext(Entity target) {
+        
         for (Projectile p: projectiles) {
             p.goNext();
-            if (!p.getTransform().isInside(gameArea)) {
+            System.out.println(projectiles.size());
+            /*if (p.getTransform().isInside(gameArea)) {
                 removeProjectile(p);
-            }
+                
+            }*/
+            
         }
         return isCollision(target);
     }

@@ -56,7 +56,7 @@ public class Renderer {
     private final int[] texSlots = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
     private int vaoID, vboID;
-    private final int maxBatchSize = 100;
+    private final int maxBatchSize = 1000;
     private final Shader shader;
 
     public Renderer() {

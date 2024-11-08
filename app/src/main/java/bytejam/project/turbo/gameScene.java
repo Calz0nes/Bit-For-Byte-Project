@@ -4,13 +4,16 @@ import org.joml.Vector2f;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
 
 import bytejam.project.renderer.Renderer;
 import static bytejam.project.turbo.Window.get;
 import bytejam.project.turbo.game_objects.Background;
 import bytejam.project.turbo.game_objects.Cursor;
 import bytejam.project.turbo.game_objects.Player;
+import bytejam.project.turbo.game_objects.Projectile;
 import bytejam.project.turbo.util.AssetPool;
+import bytejam.project.turbo.util.ProjectileManager;
 import bytejam.project.turbo.util.Transform;
 
 public class gameScene extends Scene{
@@ -26,6 +29,8 @@ public class gameScene extends Scene{
     private final float gravity = 0.7f;
     private final Transform gameArea = new Transform(new Vector2f(600, 1050),new Vector2f(1200, 2100));
     private Renderer renderer;
+    private ProjectileManager PlayerProjectileManager;
+    private float attackCooldown;
     
     public gameScene() {
 
@@ -40,16 +45,16 @@ public class gameScene extends Scene{
 
         this.renderer = new Renderer();
         this.cursor = new Cursor(AssetPool.getTexture("assets/images/Crosshair.png"), new Transform(new Vector2f(30, 30)));
-
+        this.PlayerProjectileManager = new ProjectileManager(renderer, gameArea);
         this.player = new Player(AssetPool.getTexture("assets/images/Dave2.png"), new Transform(new Vector2f(150, 150)));
 
         this.background = new Background(AssetPool.getTexture("assets/images/GameBackground.jpg"), new Transform(new Vector2f(20, -400),new Vector2f(1200, 2100)));
         
         sound = new Sound("assets/sounds/file_example_OOG_1MG.ogg", true);
         
-        renderer.add(cursor);
-        renderer.add(background);
-        renderer.add(player);
+        renderer.add(this.cursor);
+        //renderer.add(background);
+        //renderer.add(player);
 
         renderer.start();
         loadResources();
@@ -83,13 +88,21 @@ public class gameScene extends Scene{
             V.x = V.x / frictionSpeed;
         }
 
-        
-
-            
         Pose.add(V);
         
-    
+        if (MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_1) && attackCooldown < 0) {
+            PlayerProjectileManager.addProjectile(new Projectile(AssetPool.getTexture("assets/images/Crosshair.png"), 
+                player.getTransform(), new Transform(new Vector2f(MouseListener.getX(), MouseListener.getY()), 
+                new Vector2f(50, 50))));
+
+            attackCooldown--;
+        } else {
+            attackCooldown = 20;
+        }
+
+
         playerBounderies(Pose);
+        PlayerProjectileManager.goNext(player);
         cursor.setPos(new Vector2f(MouseListener.getX(), MouseListener.getY()));
 
         renderer.render();
@@ -119,5 +132,8 @@ public class gameScene extends Scene{
     // Load resources during init to reduce lag.
     public void loadResources() {
         AssetPool.getShader("assets/shaders/default.glsl");
+        AssetPool.getTexture("assets/images/Crosshair.png");
+        AssetPool.getTexture("assets/images/GameBackground.jpg");
+        AssetPool.getTexture("assets/images/Dave2.png");
     }
 }
