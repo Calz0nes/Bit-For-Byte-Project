@@ -38,6 +38,11 @@ import static org.lwjgl.openal.ALC10.alcOpenDevice;
 import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.openal.ALCapabilities;
 import org.lwjgl.opengl.GL;
+
+import bytejam.project.turbo.game_scenes.gameScene2;
+import bytejam.project.turbo.game_scenes.TitleScene;
+import bytejam.project.turbo.game_scenes.gameScene;
+
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
@@ -91,7 +96,7 @@ public class Window {
                 currentScene.init();
                 break;
             case 2:
-                currentScene = new ExampleScene();
+                currentScene = new gameScene2();
                 currentScene.init();
                 break;
             default:
@@ -178,7 +183,7 @@ public class Window {
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         
-        changeScene(1);
+        changeScene(0);
     }
 
     // This line is critical for LWJGL's interoperation with GLFW's
