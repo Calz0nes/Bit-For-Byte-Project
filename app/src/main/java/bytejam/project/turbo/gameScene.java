@@ -17,7 +17,7 @@ public class gameScene extends Scene{
     private Background background;
     private Cursor cursor;
     private Player player;
-    private Sound sound;
+    private final Sound sound = new Sound("assets/sounds/EpicMusic.ogg", true);
     private final float Speed = 10;
     private final float jumpV = 20;
     private Vector2f Pose;
@@ -46,8 +46,6 @@ public class gameScene extends Scene{
         this.player = new Player(AssetPool.getTexture("assets/images/dave Pixleated.png"), new Transform(new Vector2f(128, 91)));
 
         this.background = new Background(AssetPool.getTexture("assets/images/GameBackground.jpg"), new Transform(new Vector2f(20, -400),new Vector2f(1200, 2100)));
-        
-        sound = new Sound("assets/sounds/file_example_OOG_1MG.ogg", true);
         
         //renderer.add(this.cursor);
         renderer.add(background);
