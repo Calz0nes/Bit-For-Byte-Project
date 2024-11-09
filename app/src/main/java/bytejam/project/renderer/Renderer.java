@@ -41,7 +41,7 @@ public class Renderer {
     private final int POS_SIZE = 2;
     private final int COLOR_SIZE = 4;
     private final int TEX_COORDS_SIZE = 2;
-    private final int TEX_ID_SiZE = 1;
+    private final int TEX_ID_SIZE = 1;
 
     private final int POS_OFFSET = 0;
     private final int COLOR_OFFSET = POS_OFFSET + POS_SIZE * Float.BYTES;
@@ -83,7 +83,7 @@ public class Renderer {
         vboID = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, vertices.length * Float.BYTES, GL_DYNAMIC_DRAW);
-        
+
         // Create and upload indices buffer.
         int eboID = glGenBuffers();
         int[] indices = generateIndices();
@@ -105,11 +105,11 @@ public class Renderer {
         glEnableVertexAttribArray(2);
 
         // Assign texture id.
-        glVertexAttribPointer(3, TEX_ID_SiZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEX_ID_OFFSET);
+        glVertexAttribPointer(3, TEX_ID_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEX_ID_OFFSET);
         glEnableVertexAttribArray(3);
 
-        for (Entity e: entities) {
-        // Add properties to local vertices array.
+        for (Entity e : entities) {
+            // Add properties to local vertices array.
         loadVertexProperties(entities.indexOf(e));
         }
     }
@@ -117,7 +117,7 @@ public class Renderer {
     public void add(Entity entity) {
         // Get index and add renderObject.
         this.entities.add(entity);
-        
+
         if(entity.getTexture() != null) {
             if (!textures.contains(entity.getTexture())) {
                 textures.add(entity.getTexture());
@@ -136,15 +136,12 @@ public class Renderer {
 
     public void render() {
 
-        for (Entity e: entities) {
+        for (Entity e : entities) {
             loadVertexProperties(entities.indexOf(e));
         }
 
-        // Set to rebuffer all data every frame.
-        glBindBuffer(GL_ARRAY_BUFFER, vaoID);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
 
-        // Bind.
+        // Bind shader.
         shader.bind();
         shader.uploadMat4f("uProjection", Window.getScene().camera().getProjectionMatrix());
         shader.uploadMat4f("uView", Window.getScene().camera().getViewMatrix());
@@ -159,8 +156,13 @@ public class Renderer {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
 
+        // Set to rebuffer all data every frame.
+        glBindBuffer(GL_ARRAY_BUFFER, vboID);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+
+
         // Render.
-        glDrawElements(GL_TRIANGLES, (this.entities.size()) * 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, entities.size() * 6, GL_UNSIGNED_INT, 0);
 
         // Unbind.
         glDisableVertexAttribArray(0);
@@ -179,7 +181,7 @@ public class Renderer {
 
         // Find offset within array (4 vertices per sprite)
         int offset = index * 4 * VERTEX_SIZE;
-        
+
         Vector4f color = entity.getColor();
         Vector2f[] texCoords = entity.getTexCoords();
 
@@ -195,8 +197,7 @@ public class Renderer {
             }
 
         }
-        
-
+        System.out.println(texId);
         // Add vertice with the appropriate properties.
         float xAdd = 1.0f;
         float yAdd = 1.0f;
@@ -227,13 +228,6 @@ public class Renderer {
 
             // Load texture id.
             vertices[offset + 8] = texId;
-
-            
-            //for (int n=0; n< 9; n++ ) {
-            //    System.out.print(vertices[offset + n]);
-            //    System.out.println();
-            //}
-            
 
             offset += VERTEX_SIZE;
         }

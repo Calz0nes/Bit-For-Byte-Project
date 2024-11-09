@@ -201,11 +201,13 @@ public class Window {
 
             if (dt >= 0) {
                 currentScene.update(dt);
+                
+            
+
             }
 
-            if (KeyListener.isKeyPressed(GLFW_KEY_Y)) {
-                changeScene(2);
-            }
+           
+            
 
             
             glfwSwapBuffers(glfwWindow);

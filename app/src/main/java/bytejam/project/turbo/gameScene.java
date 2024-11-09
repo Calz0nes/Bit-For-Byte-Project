@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_Y;
 
 import bytejam.project.renderer.Renderer;
 import static bytejam.project.turbo.Window.get;
@@ -60,7 +61,10 @@ public class gameScene extends Scene{
         get();
         sound.play();
         
-        
+        if (KeyListener.isKeyPressed(GLFW_KEY_Y)) {
+            get().changeScene(2);
+            sound.stop();
+        }
         if (KeyListener.isKeyPressed(GLFW_KEY_W)) {
             if (isOnFloor()) {
                 V.y = jumpV;
