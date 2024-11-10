@@ -44,9 +44,9 @@ public class PastScene extends Scene{
         this.renderer = new Renderer();
         //this.cursor = new Cursor(AssetPool.getTexture("assets/images/Crosshair.png"), new Transform(new Vector2f(30, 30)));
         //this.PlayerProjectileManager = new ProjectileManager(renderer, gameArea);
-        this.player = new Player(AssetPool.getTexture("assets/images/dave Pixleated.png"), new Transform(new Vector2f(128, 91)));
+        this.player = new Player(AssetPool.getTexture("assets/images/Dave.png"), new Transform(new Vector2f(128, 91)));
 
-        this.background = new Background(AssetPool.getTexture("assets/images/SecondBackGround.jpg"), new Transform(new Vector2f(20, -400),new Vector2f(1200, 2100)));
+        this.background = new Background(AssetPool.getTexture("assets/images/PastBackground.jpg"), new Transform(new Vector2f(20, -400),new Vector2f(1200, 2100)));
         
         //renderer.add(this.cursor);
         renderer.add(background);
@@ -133,7 +133,7 @@ public class PastScene extends Scene{
     // Load resources during init to reduce lag.
     public void loadResources() {
         AssetPool.getShader("assets/shaders/default.glsl");
-        AssetPool.getTexture("assets/images/GameBackground.jpg");
-        AssetPool.getTexture("assets/images/dave Pixleated.png");
+        AssetPool.getTexture("assets/images/PastBackground.jpg");
+        AssetPool.getTexture("assets/images/Dave.png");
     }
 }
