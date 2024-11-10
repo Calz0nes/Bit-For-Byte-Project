@@ -7,19 +7,18 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Y;
 
 import bytejam.project.renderer.Renderer;
-import static bytejam.project.turbo.Window.get;
-
 import bytejam.project.turbo.Camera;
 import bytejam.project.turbo.KeyListener;
 import bytejam.project.turbo.Scene;
 import bytejam.project.turbo.Sound;
+import static bytejam.project.turbo.Window.get;
 import bytejam.project.turbo.game_objects.Background;
 import bytejam.project.turbo.game_objects.Cursor;
 import bytejam.project.turbo.game_objects.Player;
 import bytejam.project.turbo.util.AssetPool;
 import bytejam.project.turbo.util.Transform;
 
-public class gameScene extends Scene{
+public class PastScene extends Scene{
     private Background background;
     private Cursor cursor;
     private Player player;
@@ -34,10 +33,6 @@ public class gameScene extends Scene{
     private Renderer renderer;
     //private ProjectileManager PlayerProjectileManager;
     //private float attackCooldown;
-    
-    public gameScene() {
-
-    }
 
     @Override
     public void init() {
@@ -51,7 +46,7 @@ public class gameScene extends Scene{
         //this.PlayerProjectileManager = new ProjectileManager(renderer, gameArea);
         this.player = new Player(AssetPool.getTexture("assets/images/dave Pixleated.png"), new Transform(new Vector2f(128, 91)));
 
-        this.background = new Background(AssetPool.getTexture("assets/images/GameBackground.jpg"), new Transform(new Vector2f(20, -400),new Vector2f(1200, 2100)));
+        this.background = new Background(AssetPool.getTexture("assets/images/SecondBackGround.jpg"), new Transform(new Vector2f(20, -400),new Vector2f(1200, 2100)));
         
         //renderer.add(this.cursor);
         renderer.add(background);
@@ -67,7 +62,7 @@ public class gameScene extends Scene{
         sound.play();
         
         if (KeyListener.isKeyPressed(GLFW_KEY_Y)) {
-            get().changeScene(2);
+            get().changeScene(0);
             sound.stop();
         }
         if (KeyListener.isKeyPressed(GLFW_KEY_W)) {

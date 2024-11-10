@@ -3,7 +3,6 @@ package bytejam.project.turbo;
 import org.lwjgl.Version;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_Y;
 import static org.lwjgl.glfw.GLFW.GLFW_MAXIMIZED;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
@@ -38,11 +37,6 @@ import static org.lwjgl.openal.ALC10.alcOpenDevice;
 import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.openal.ALCapabilities;
 import org.lwjgl.opengl.GL;
-
-import bytejam.project.turbo.game_scenes.gameScene2;
-import bytejam.project.turbo.game_scenes.TitleScene;
-import bytejam.project.turbo.game_scenes.gameScene;
-
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
@@ -52,6 +46,10 @@ import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.system.MemoryUtil.NULL;
+
+import bytejam.project.turbo.game_scenes.PastScene;
+import bytejam.project.turbo.game_scenes.PresentScene;
+import bytejam.project.turbo.game_scenes.TitleScene;
 
 public class Window {
 
@@ -92,11 +90,11 @@ public class Window {
                 currentScene.init();
                 break;
             case 1:
-                currentScene = new gameScene();
+                currentScene = new PresentScene();
                 currentScene.init();
                 break;
             case 2:
-                currentScene = new gameScene2();
+                currentScene = new PastScene();
                 currentScene.init();
                 break;
             default:
