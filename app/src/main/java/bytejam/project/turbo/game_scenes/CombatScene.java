@@ -5,10 +5,12 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
 
 import bytejam.project.renderer.Renderer;
 import bytejam.project.turbo.Camera;
 import bytejam.project.turbo.KeyListener;
+import bytejam.project.turbo.MouseListener;
 import bytejam.project.turbo.Scene;
 import bytejam.project.turbo.Sound;
 import static bytejam.project.turbo.Window.get;
@@ -17,6 +19,7 @@ import bytejam.project.turbo.game_objects.Cursor;
 import bytejam.project.turbo.game_objects.Player;
 import bytejam.project.turbo.game_objects.Projectile;
 import bytejam.project.turbo.util.AssetPool;
+import bytejam.project.turbo.util.EnemyManager;
 import bytejam.project.turbo.util.ProjectileManager;
 import bytejam.project.turbo.util.Transform;
 
@@ -35,20 +38,22 @@ public class CombatScene extends Scene {
     private Background pastBackground;
     private Cursor cursor;
     private Player player;
-    private Projectile testProjectile1;
-    private Projectile testProjectile2;
-    private Projectile testProjectile3;
     private ProjectileManager DaveProjectileManager;
+    private EnemyManager pastEnemyManager;
+    private EnemyManager presentEnemyManager;
 
     // Dave variables.
     private final float Speed = 10;
     private final float jumpV = 20;
-    private Vector2f Pose = new Vector2f(0, 0);
-    private Vector2f V = new Vector2f(0, 0);
+    private final Vector2f Pose = new Vector2f(0, 0);
+    private final Vector2f V = new Vector2f(0, 0);
     private final float frictionSpeed = 1.2f;
     private final float gravity = 0.7f;
+    private float attackCooldown;
+    private float timeTravelCooldown;
 
-    private boolean isPresent;
+
+    private boolean isPresent = true;
     private boolean timeInit;
 
     @Override
@@ -61,22 +66,23 @@ public class CombatScene extends Scene {
 
         this.player = new Player(AssetPool.getTexture("assets/images/Dave.png"), new Transform(new Vector2f(128, 91)));
 
-        this.testProjectile1 = new Projectile(AssetPool.getTexture("assets/images/EnemyProjectile.png"), new Vector2f(800, 0), new Vector2f(50,50));
-        this.testProjectile2 = new Projectile(AssetPool.getTexture("assets/images/EnemyProjectile.png"), new Vector2f(500, 500), new Vector2f(0,0));
-        this.testProjectile3 = new Projectile(AssetPool.getTexture("assets/images/EnemyProjectile.png"), new Vector2f(-300, -300), new Vector2f(800,800));
+        this.presentBackground = new Background(AssetPool.getTexture("assets/images/PresentBackground.jpg"), new Transform(new Vector2f(0, 0),new Vector2f(1200, 2100)));
+        this.pastBackground = new Background(AssetPool.getTexture("assets/images/PastBackground.jpg"), new Transform(new Vector2f(10000, 10000),new Vector2f(1200, 2100)));
 
+        
+        // Init managers.
         this.DaveProjectileManager = new ProjectileManager(this.renderer);
 
-        this.presentBackground = new Background(AssetPool.getTexture("assets/images/PresentBackground.jpg"), new Transform(new Vector2f(0, 0),new Vector2f(1200, 2100)));
-        this.pastBackground = new Background(AssetPool.getTexture("assets/images/PresentBackground.jpg"), new Transform(new Vector2f(10000, 10000),new Vector2f(1200, 2100)));
+        this.pastEnemyManager = new EnemyManager(this.renderer, this.DaveProjectileManager, AssetPool.getTexture("assets/images/EnemyProjectile.png"), AssetPool.getTexture("assets/images/Enemy.png"), this.pastGameArea);
+        this.presentEnemyManager = new EnemyManager(this.renderer, this.DaveProjectileManager, AssetPool.getTexture("assets/images/EnemyProjectile.png"), AssetPool.getTexture("assets/images/Enemy.png"), this.presentGameArea);
+        this.pastEnemyManager.attachTarget(player);
+        this.presentEnemyManager.attachTarget(player);
+
         
 
         // Add objects in the order that you want them to show up on screen.
         renderer.add(this.presentBackground);
         renderer.add(this.pastBackground);
-        DaveProjectileManager.addProjectile(this.testProjectile1);
-        DaveProjectileManager.addProjectile(this.testProjectile2);
-        DaveProjectileManager.addProjectile(this.testProjectile3);
         renderer.add(this.player);
         renderer.add(this.cursor);
 
@@ -86,6 +92,7 @@ public class CombatScene extends Scene {
 
     @Override
     public void update(float dt) {
+        
         // Get instance of Window class.
         get();
 
@@ -95,14 +102,32 @@ public class CombatScene extends Scene {
         // Move Dave.
         Move();
 
-        if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
-            DaveProjectileManager.update(player, presentGameArea);
+        if (KeyListener.isKeyPressed(GLFW_KEY_SPACE) && timeTravelCooldown <= 0) {
+            isPresent = !isPresent;
+            timeInit = false;
+            timeTravelCooldown = 10;
         }
+
+        if (MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_1) && attackCooldown <= 0) {
+            DaveProjectileManager.addProjectile(new Projectile(AssetPool.getTexture("assets/images/DaveProjectile.png"), player.getPos(), cursor.getPos()));
+            attackCooldown = 10;
+        }
+
+        if (isPresent) {
+            Present();
+        } else {
+            Past();
+        }
+        
+        pastEnemyManager.update(DaveProjectileManager);
+        presentEnemyManager.update(DaveProjectileManager);
 
         cursor.update();
 
-
-
+        timeTravelCooldown--;
+        attackCooldown--;
+        
+        // Render new frame.
         renderer.render();
     }
 
@@ -191,7 +216,11 @@ public class CombatScene extends Scene {
             camera.setCamPosition(new Vector2f(0,0));
         }
 
-        timeInit = false;
+        pastEnemyManager.update(DaveProjectileManager);
+
+
+
+        timeInit = true;
     }
 
     private void Present() {
@@ -200,7 +229,10 @@ public class CombatScene extends Scene {
             camera.setCamPosition(new Vector2f(10000, 10000));
         }
 
-        timeInit = false;
+        presentEnemyManager.update(DaveProjectileManager);
+
+
+        timeInit = true;
     }
     
 }
