@@ -7,7 +7,9 @@ import java.util.Random;
 import org.joml.Vector2f;
 
 import bytejam.project.renderer.Renderer;
+import bytejam.project.renderer.Texture;
 import bytejam.project.turbo.game_objects.Entity;
+import bytejam.project.turbo.game_objects.Player;
 import bytejam.project.turbo.game_objects.Projectile;
 
 public class EnemyManager {
@@ -18,14 +20,20 @@ public class EnemyManager {
     private final int speed = 15;
 
     private final Renderer renderer;
-    private final Transform gameArea;
     private Entity target;
+
+    private Transform gameArea;
+
+    private Texture enemyTexture;
+    private Texture projectileTexture;
 
     private final List<Entity> entities;
     private final ProjectileManager enemyProjectileManager;
 
-    public EnemyManager(Renderer renderer, ProjectileManager enemyProjectileManager, Transform gameArea) {
+    public EnemyManager(Renderer renderer, ProjectileManager enemyProjectileManager, Texture enemyTexture, Texture projectileTexture, Transform gameArea) {
         this.renderer = renderer;
+        this.enemyTexture = enemyTexture;
+        this.projectileTexture = projectileTexture;
         this.gameArea = gameArea;
         this.target = null;
         this.entities = new ArrayList<>();
@@ -73,7 +81,7 @@ public class EnemyManager {
 
             } else if (Chance(randAttack)) {
                 // Projectile attack.
-                //addProjectile(new Projectile(, target.getTransform().Center, e.getTransform().Center));
+                addProjectile(new Projectile(projectileTexture, target.getTransform().Center, e.getTransform().Center));
 
             } else {
                 // Just move.
@@ -121,5 +129,12 @@ public class EnemyManager {
 
     private void addProjectile(Projectile projectile) {
         enemyProjectileManager.addProjectile(projectile);
+    }
+
+    public void spawn() {
+        Float xPos = new Random().nextFloat(gameArea.Size.x) + gameArea.Center.x;
+        Float yPos = new Random().nextFloat(gameArea.Size.y) + gameArea.Center.y;
+
+        entities.add(new Player(enemyTexture, new Transform(new Vector2f(xPos, yPos),new Vector2f(60, 60))));
     }
 }
