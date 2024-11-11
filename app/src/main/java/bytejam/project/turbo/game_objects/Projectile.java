@@ -14,31 +14,32 @@ public class Projectile extends Entity {
 
     private float V;
     private Vector2f vAdd;
-    private final Transform targetTransform;
+    private Vector2f target;
     private final Transform transform;
     private final Texture texture;
     private Vector4f Color;
 
     /* Draw Manual */
-    public Projectile(Vector4f Color, Transform targetTransform, Transform entityTransform) {
+    public Projectile(Vector4f Color, Vector2f target, Vector2f orgin) {
         this.texture = null;
         this.Color = Color;
-        this.targetTransform = targetTransform;
-        this.transform = entityTransform;
+        this.target = target;
+        this.transform = new Transform(orgin, new Vector2f(30,30));
         this.vAdd = new Vector2f(0,0);
         this.V = defualtV;
         plot();
     }
 
     /* Use Texture */
-    public Projectile(Texture texture, Transform targetTransform, Transform entityTransform) {
+    public Projectile(Texture texture, Vector2f target, Vector2f orgin) {
         this.texture = texture;
         this.Color = defaultColor;
-        this.targetTransform = targetTransform;
-        this.transform = entityTransform;
+        this.target = target;
+        this.transform = new Transform(orgin, new Vector2f(30,30));
         this.vAdd = new Vector2f(0,0);
         this.V = defualtV;
         plot();
+        System.out.println("You can see this.");
     }
 
     @Override
@@ -86,15 +87,19 @@ public class Projectile extends Entity {
     }
 
     private void plot() {
-        float angle = transform.Center.angle(targetTransform.Center);
+        float xAdd = this.transform.Center.x + target.x;
+        float yAdd = this.transform.Center.y + target.y;
 
-        float xAdd = (float)Math.cos(V/60 * angle);
-        float yAdd = (float)Math.sin(V/60 * angle);
+        double angle = Math.tanh(yAdd/xAdd);
+        
+        xAdd = V * (float)Math.cos(angle);
+        yAdd = V * (float)Math.sin(angle);
 
+        
         this.vAdd = new Vector2f(xAdd, yAdd);
     }
 
-    public void goNext() {
+    public void update() {
         this.transform.Center.add(vAdd);
     }
 }

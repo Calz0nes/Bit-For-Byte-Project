@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import bytejam.project.renderer.Texture;
+import bytejam.project.turbo.MouseListener;
 import bytejam.project.turbo.util.Transform;
 
 public class Cursor extends Entity{
@@ -63,6 +64,10 @@ public class Cursor extends Entity{
     @Override
     public Transform getTransform() {
         return this.transform;
+    }
+
+    public void update() {
+        this.transform.Center = new Vector2f(MouseListener.getX(), MouseListener.getY());
     }
 
 }

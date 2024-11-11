@@ -47,8 +47,8 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-import bytejam.project.turbo.game_scenes.PastScene;
-import bytejam.project.turbo.game_scenes.PresentScene;
+import bytejam.project.turbo.game_scenes.CombatScene;
+import bytejam.project.turbo.game_scenes.EndScene;
 import bytejam.project.turbo.game_scenes.TitleScene;
 
 public class Window {
@@ -90,13 +90,12 @@ public class Window {
                 currentScene.init();
                 break;
             case 1:
-                currentScene = new PresentScene();
+                currentScene = new CombatScene();
                 currentScene.init();
                 break;
-            case 2:
-                currentScene = new PastScene();
+            case 2: 
+                currentScene = new EndScene();
                 currentScene.init();
-                break;
             default:
                 assert false : "Unknown scene '" + newScene + "'";
                 break;
@@ -181,6 +180,7 @@ public class Window {
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         
+        // Change scene to titlescene.
         changeScene(0);
     }
 
@@ -189,6 +189,7 @@ public class Window {
 	// LWJGL detects the context that is current in the current thread,
 	// creates the GLCapabilities instance and makes the OpenGL
 	// bindings available for use.
+
     public void loop() {
         float beginTime = (float)glfwGetTime(); //Time when frame started.
         float endTime; //Time when frame ended.
@@ -199,25 +200,21 @@ public class Window {
 			// Poll for window events. 
 			glfwPollEvents();
 
-            //glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+            // glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            // Give program time to init then begin running currentScene.update();
             if (dt >= 0) {
                 currentScene.update(dt);
-                
-            
-
             }
 
-           
-            
-
-            
             glfwSwapBuffers(glfwWindow);
 
+            // Calc delta time.
             endTime = (float)glfwGetTime();
             dt = endTime - beginTime; //Delta time = seconds per frame.
             beginTime = endTime;
+
 		}
     }
 }

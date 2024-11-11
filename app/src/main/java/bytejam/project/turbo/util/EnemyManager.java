@@ -7,7 +7,6 @@ import java.util.Random;
 import org.joml.Vector2f;
 
 import bytejam.project.renderer.Renderer;
-import bytejam.project.renderer.Texture;
 import bytejam.project.turbo.game_objects.Entity;
 import bytejam.project.turbo.game_objects.Projectile;
 
@@ -42,7 +41,7 @@ public class EnemyManager {
         this.renderer.add(entity);
     }
 
-    public boolean goNext(ProjectileManager targetProjectileManager) {
+    public boolean update(ProjectileManager targetProjectileManager) {
         Vector2f nextPos = new Vector2f();
 
         Transform targetTransform = new Transform(target.getPos(), agroRadius);
@@ -74,7 +73,7 @@ public class EnemyManager {
 
             } else if (Chance(randAttack)) {
                 // Projectile attack.
-                addProjectile(new Projectile(new Texture(""), target.getTransform(), e.getTransform()));
+                //addProjectile(new Projectile(, target.getTransform().Center, e.getTransform().Center));
 
             } else {
                 // Just move.
@@ -84,14 +83,14 @@ public class EnemyManager {
                 entityMove(new Vector2f(x, y), entities.indexOf(e));
             }
 
-            if (targetProjectileManager.goNext(e)) {
+            if (targetProjectileManager.update(e, gameArea)) {
                 entities.remove(e);
                 renderer.remove(e);
             }
         }
         
         // checks to see if projectile hits target.
-        return this.enemyProjectileManager.goNext(target);
+        return this.enemyProjectileManager.update(target, gameArea);
     }
 
     // I LOVE GAMBLING!

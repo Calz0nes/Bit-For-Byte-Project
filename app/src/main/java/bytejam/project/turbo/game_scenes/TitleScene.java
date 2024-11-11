@@ -44,11 +44,12 @@ public class TitleScene extends Scene{
     @Override
     public void update(float dt) {
         this.sound.play();
+        
         if (KeyListener.isKeyPressed(GLFW_KEY_ENTER)) {
             Window.get().changeScene(1);
             this.sound.stop();
         }
-       
+        
         // Render new frame.
         this.renderer.render();
     }

@@ -102,14 +102,4 @@ public class Player extends Entity {
     public Transform getTransform() {
         return this.transform;
     }
-
-    /* 
-    public boolean isHit(Projectile projectile) {
-        if (projectile.isInside()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    */
 }
