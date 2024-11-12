@@ -27,7 +27,6 @@ public class EndScene extends Scene{
         this.camera = new Camera(new Vector2f(0, 0));
         this.renderer = new Renderer();
         this.player = new Player(AssetPool.getTexture("assets/images/BestTitleScene.png"), new Transform(new Vector2f(0,0), new Vector2f(1300, 675)));
-        // this.sound = new Sound("assets/sounds/file_example_OOG_1MG.ogg");
         
         renderer.add(player);
 

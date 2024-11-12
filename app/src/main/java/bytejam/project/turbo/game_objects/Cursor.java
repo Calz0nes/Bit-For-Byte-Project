@@ -66,8 +66,12 @@ public class Cursor extends Entity{
         return this.transform;
     }
 
-    public void update() {
-        this.transform.Center = new Vector2f(MouseListener.getX() -300, MouseListener.getY() + 800);
+    public void update(boolean isPresent) {
+        if (!isPresent) {
+            this.transform.Center = new Vector2f(MouseListener.getX() -300 + 10000, MouseListener.getY() + 800 +10000);
+        } else {
+            this.transform.Center = new Vector2f(MouseListener.getX() -300, MouseListener.getY() + 800);
+        }
     }
 
 }

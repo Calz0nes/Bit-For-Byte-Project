@@ -7,7 +7,6 @@ import bytejam.project.turbo.Window;
 
 public class App {
     public static void main(String[] args) {
-
         Window window = Window.get();
         window.run();
     }

@@ -27,7 +27,7 @@ public class CombatScene extends Scene {
     
     private final Renderer renderer = new Renderer();
     
-    private final Transform presentGameArea = new Transform(new Vector2f(0,0),new Vector2f(1200, 2100));
+    private final Transform presentGameArea = new Transform(new Vector2f(575,1050),new Vector2f(1200, 2100));
     private final Transform pastGameArea = new Transform(new Vector2f(10000, 10000),new Vector2f(1200, 2100));
 
     // Define all sounds here.
@@ -45,15 +45,15 @@ public class CombatScene extends Scene {
     // Dave variables.
     private final float Speed = 10;
     private final float jumpV = 20;
-    private final Vector2f Pose = new Vector2f(0, 0);
-    private final Vector2f V = new Vector2f(0, 0);
+    private Vector2f Pose;
+    private Vector2f V;
     private final float frictionSpeed = 1.2f;
     private final float gravity = 0.7f;
     private float attackCooldown;
     private float timeTravelCooldown;
 
 
-    private boolean isPresent = true;
+    private boolean isPresent = false;
     private boolean timeInit;
 
     @Override
@@ -61,13 +61,16 @@ public class CombatScene extends Scene {
         // Init Camera.
         this.camera = new Camera(new Vector2f(0, 0));
 
+        Pose = new Vector2f(0, 0);
+        V = new Vector2f(0, 0);
+
         // Init entities.
         this.cursor = new Cursor(AssetPool.getTexture("assets/images/Crosshair.png"), new Transform(new Vector2f(30, 30)));
 
         this.player = new Player(AssetPool.getTexture("assets/images/Dave.png"), new Transform(new Vector2f(128, 91)));
 
-        this.presentBackground = new Background(AssetPool.getTexture("assets/images/PresentBackground.jpg"), new Transform(new Vector2f(0, 0),new Vector2f(1200, 2100)));
-        this.pastBackground = new Background(AssetPool.getTexture("assets/images/PastBackground.jpg"), new Transform(new Vector2f(10000, 10000),new Vector2f(1200, 2100)));
+        this.presentBackground = new Background(AssetPool.getTexture("assets/images/PresentBackground.jpg"), new Transform(new Vector2f(50, -300),new Vector2f(1200, 2100)));
+        this.pastBackground = new Background(AssetPool.getTexture("assets/images/PastBackground.jpg"), new Transform(new Vector2f(10000 + 50, 10000 - 300),new Vector2f(1200, 2100)));
 
         
         // Init managers.
@@ -83,8 +86,8 @@ public class CombatScene extends Scene {
         // Add objects in the order that you want them to show up on screen.
         renderer.add(this.presentBackground);
         renderer.add(this.pastBackground);
-        renderer.add(this.player);
         renderer.add(this.cursor);
+        renderer.add(this.player);
 
         renderer.start();
         loadResources();
@@ -97,7 +100,7 @@ public class CombatScene extends Scene {
         get();
 
         // Play sound.
-        sound.play();
+        //sound.play();
 
         // Move Dave.
         Move();
@@ -118,11 +121,8 @@ public class CombatScene extends Scene {
         } else {
             Past();
         }
-        
-        pastEnemyManager.update(DaveProjectileManager);
-        presentEnemyManager.update(DaveProjectileManager);
 
-        cursor.update();
+        cursor.update(isPresent);
 
         timeTravelCooldown--;
         attackCooldown--;
@@ -136,10 +136,10 @@ public class CombatScene extends Scene {
             if (isOnFloor()) {
                 V.y = jumpV;
             } else {
-                V.y -= gravity;
+                //V.y -= gravity;
             } 
         } else {
-            V.y -= gravity;
+            //V.y -= gravity;
         } 
         
         if (KeyListener.isKeyPressed(GLFW_KEY_A)) {
@@ -169,7 +169,6 @@ public class CombatScene extends Scene {
             gameArea = pastGameArea;
             nextPos.add(10000, 10000);
         }
-
 
         if (nextPos.x > gameArea.Size.x/2 + gameArea.Center.x) {
             nextPos.x = gameArea.Size.x/2 + gameArea.Center.x;
@@ -213,12 +212,10 @@ public class CombatScene extends Scene {
     private void Past() {
         if (!timeInit) {
             // Put code here for init.
-            camera.setCamPosition(new Vector2f(0,0));
+            camera.setCamPosition(new Vector2f(10000,10000));
         }
 
         pastEnemyManager.update(DaveProjectileManager);
-
-
 
         timeInit = true;
     }
@@ -226,11 +223,10 @@ public class CombatScene extends Scene {
     private void Present() {
         if (!timeInit) {
             // Put code here for init.
-            camera.setCamPosition(new Vector2f(10000, 10000));
+            camera.setCamPosition(new Vector2f(0,0));
         }
 
         presentEnemyManager.update(DaveProjectileManager);
-
 
         timeInit = true;
     }
