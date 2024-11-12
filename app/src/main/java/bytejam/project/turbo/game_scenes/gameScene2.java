@@ -3,6 +3,7 @@ package bytejam.project.turbo.game_scenes;
 import org.joml.Vector2f;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Y;
 
@@ -66,7 +67,7 @@ public class gameScene2 extends Scene{
         get();
         sound.play();
         
-        if (KeyListener.isKeyPressed(GLFW_KEY_Y)) {
+        if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
             get().changeScene(0);
             sound.stop();
         }
